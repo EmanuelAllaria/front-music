@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/front-music/static/css/main.63427873.css",
+    "main.js": "/front-music/static/js/main.e9eaa33c.js",
+    "static/js/787.bc226820.chunk.js": "/front-music/static/js/787.bc226820.chunk.js",
+    "index.html": "/front-music/index.html",
+    "main.63427873.css.map": "/front-music/static/css/main.63427873.css.map",
+    "main.e9eaa33c.js.map": "/front-music/static/js/main.e9eaa33c.js.map",
+    "787.bc226820.chunk.js.map": "/front-music/static/js/787.bc226820.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.63427873.css",
+    "static/js/main.e9eaa33c.js"
+  ]
+}
