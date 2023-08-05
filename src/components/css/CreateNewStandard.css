@@ -1,0 +1,70 @@
+.form_create_standard {
+  padding: 20px;
+}
+.text_dashboard h2 {
+  padding: 20px;
+  font-weight: 500;
+}
+.title_create_release h2 strong {
+  font-weight: 900;
+  font-size: xxx-large;
+}
+.form_create_standard form {
+  margin-top: 30px;
+}
+.title_form_info h2 {
+  font-size: xx-large;
+  padding: 20px 0;
+  border-bottom: 1px solid #d9d9d9;
+}
+.form_information,
+.form_artwork {
+  padding: 50px;
+}
+.copy,
+.prod {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+.form_input {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  margin-top: 20px;
+}
+.form_input input,
+.form_input select {
+  height: 50px;
+}
+.form_information > div {
+  margin-left: 50px;
+}
+.form_info_rel_art {
+  width: calc(60% + 20px);
+}
+.form_artwork img {
+  width: 90%;
+}
+.form_artwork .form_input input {
+  height: 50px;
+  border: 2px dotted #959595;
+  padding: 50px 50px 60px 50px;
+  background: #efeffc;
+  width: 90%;
+}
+.form_submit {
+  margin-top: 50px;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+}
+.form_submit input {
+  height: 40px;
+  width: 150px;
+  background: #3a1bb9;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}

@@ -1,0 +1,94 @@
+@media screen and (max-width: 990px) {
+  .fa-bars {
+    display: block !important;
+  }
+  .nav {
+    display: none !important;
+  }
+  .nav.visible {
+    display: block !important;
+    position: absolute;
+    top: 73px !important;
+    left: 0;
+    height: 100vh !important;
+    width: 100% !important;
+    background: #2b0000 !important;
+  }
+  .nav.visible ul {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 50px !important;
+    list-style: none !important;
+    align-items: center !important;
+    margin-top: 50px !important;
+  }
+  .nav.visible ul li a {
+    color: #fff !important;
+  }
+  .form_input {
+    width: 100% !important;
+  }
+  .form_information > div {
+    margin-left: 0 !important;
+  }
+  .copy,
+  .prod {
+    gap: 0 !important;
+    flex-direction: column !important;
+  }
+}
+@media screen and (min-width: 991px) {
+  .nav ul li a {
+    font-size: 20px !important;
+    padding: 25px 0 !important;
+  }
+  .logo h1 {
+    font-size: 30px !important;
+  }
+  .text_dashboard h2 {
+    font-size: 50px !important;
+  }
+  .text_dashboard p {
+    font-size: 18px !important;
+  }
+  .cards_create_music {
+    margin-top: 50px !important;
+  }
+  .card p {
+    font-size: 22px !important;
+  }
+  .card img {
+    height: 80px !important;
+  }
+  .form_artwork img {
+    width: 30% !important;
+  }
+  .form_artwork {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+}
+@media screen and (max-width: 769px) {
+  .footer_top {
+    display: none !important;
+  }
+}
+@media screen and (min-width: 769px) {
+  .card {
+    width: 40% !important;
+  }
+  .footer_button {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-around !important;
+  }
+}
+@media screen and (min-width: 426px) {
+  .text_dashboard p {
+    text-align: center !important;
+  }
+}
+
+@media screen and (max-width: 426px) {
+}

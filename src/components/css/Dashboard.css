@@ -1,0 +1,214 @@
+/* GLOBAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+a {
+  color: #000;
+  text-decoration: none;
+}
+
+/* HEADER */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+  border-bottom: 1px solid #d9d9d9;
+}
+.logo img {
+  height: 80px;
+}
+.fa-bars {
+  display: none;
+}
+.nav ul {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 30px;
+  list-style: none;
+}
+.nav ul li a:hover,
+.nav ul li a.active {
+  color: #3a1bb9;
+  border-bottom: 3px solid #3a1bb9;
+}
+
+/* HOME_DASHBOARD */
+.text_dashboard {
+  padding: 20px;
+  text-align: center;
+}
+.text_dashboard h2 {
+  font-family: "Poppins", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+}
+.text_dashboard p {
+  text-align: justify;
+  font-family: "Boing", Helvetica, Arial, sans-serif;
+}
+
+/* CARDS CREATE */
+.cards_create_music {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.card {
+  width: 70%;
+  padding: 20px;
+  border-radius: 20px;
+  border: 2px solid #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+}
+.card.left {
+  background: #3a1bb9;
+}
+.card.right {
+  background: #8640f4;
+}
+.card p {
+  font-weight: 900;
+}
+.card img {
+  height: 50px;
+}
+.card a {
+  color: #fff;
+  border-radius: 50px;
+  border: 3px solid #fff;
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+.card a:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* CARDS RELEASES */
+.title_releases h2 {
+  padding: 20px;
+  font-weight: 500;
+}
+.cards_releases {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 50px;
+  padding: 20px;
+}
+.card_release {
+  width: fit-content;
+  border: 1px solid #c9c9c9;
+  border-radius: 20px;
+  padding: 5px;
+}
+.card_img {
+  position: relative;
+}
+.card_img img {
+  border-radius: 15px 15px 5px 5px;
+}
+/* .card_img span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px 8px;
+  background: #e38744;
+  border-radius: 10px;
+  color: #fff;
+} */
+.card_info {
+  padding: 10px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.card_info_icons {
+  display: flex;
+  gap: 20px;
+}
+
+/* FOOTER */
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-top: 60px;
+}
+.footer_top {
+  width: 100%;
+  background: #111;
+}
+.top_footer_top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40%;
+  padding: 20px;
+  border-bottom: 1px solid #000;
+}
+.credit_card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.button_footer_top {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px;
+}
+.text {
+  width: 30%;
+}
+.menu h4 {
+  border-bottom: 2px solid #ff006e;
+  border-bottom-width: 50%;
+}
+.menu ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.menu ul li a {
+  color: #fff;
+}
+.footer_button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: #000;
+  width: 100%;
+}
+.footer_button a {
+  color: #fff;
+}
+.networks {
+  font-size: 20px;
+  display: flex;
+  gap: 10px;
+}
+.fa-instagram {
+  color: #c13584;
+}
+.fa-whatsapp {
+  color: #35c13c;
+}
+.fa-facebook {
+  color: #3184b4;
+}
