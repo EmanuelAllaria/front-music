@@ -8,11 +8,11 @@
   .nav.visible {
     display: block !important;
     position: absolute;
-    top: 73px !important;
+    top: 69px !important;
     left: 0;
     height: 100vh !important;
     width: 100% !important;
-    background: #2b0000 !important;
+    background: #fff !important;
   }
   .nav.visible ul {
     display: flex !important;
@@ -23,7 +23,7 @@
     margin-top: 50px !important;
   }
   .nav.visible ul li a {
-    color: #fff !important;
+    color: #000 !important;
   }
   .form_input {
     width: 100% !important;
@@ -35,6 +35,26 @@
   .prod {
     gap: 0 !important;
     flex-direction: column !important;
+  }
+  .header_release {
+    flex-direction: column !important;
+  }
+  .body_release {
+    flex-direction: column !important;
+  }
+  .info_release {
+    width: 100% !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .songs .audio_container {
+    flex-direction: column !important;
+  }
+  .songs audio {
+    width: 20rem !important;
+  }
+  .add_musics {
+    padding: 0% 5% !important;
   }
 }
 @media screen and (min-width: 991px) {
@@ -49,7 +69,7 @@
     font-size: 50px !important;
   }
   .text_dashboard p {
-    font-size: 18px !important;
+    font-size: 20px !important;
   }
   .cards_create_music {
     margin-top: 50px !important;
@@ -67,6 +87,12 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+  }
+  .form_music {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row-reverse;
   }
 }
 @media screen and (max-width: 769px) {

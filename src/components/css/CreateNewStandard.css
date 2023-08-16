@@ -68,3 +68,75 @@
   border-radius: 20px;
   cursor: pointer;
 }
+.form_genres {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.form_music .form_input {
+  height: 100px;
+  border: 2px dotted #959595;
+  padding: 2% 5% 2% 5%;
+  background: #efeffc;
+  width: 30%;
+  align-items: center;
+  justify-content: center;
+}
+.title_form_info {
+  margin-top: 50px;
+}
+
+.form_music {
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.form_music audio {
+  width: 100%;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form_music audio::-webkit-media-controls-panel {
+  background-color: transparent;
+}
+
+.form_music audio::-webkit-media-controls-play-button,
+.form_music audio::-webkit-media-controls-volume-slider-thumb {
+  background-color: #007bff;
+}
+
+.form_music audio::-webkit-media-controls-volume-slider {
+  background-color: #ccc;
+}
+
+/* .ReactModal__Content.ReactModal__Content--after-open div:nth-child(1) {
+  display: none !important;
+} */
+
+.ReactModal__Content.ReactModal__Content--after-open h2 {
+  font-size: 40px;
+  text-align: center;
+  padding: 20px;
+}
+
+.ReactModal__Content.ReactModal__Content--after-open button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: 1px solid #a1a1a1;
+  border-radius: 20px;
+  background: none;
+  padding: 10px;
+}
+.container_image {
+  text-align: -webkit-center;
+}
+.container_image p {
+  margin-top: 50px;
+  width: 50%;
+  border: 2px solid red;
+  padding: 20px;
+}
