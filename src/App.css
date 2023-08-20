@@ -13,6 +13,7 @@
     height: 100vh !important;
     width: 100% !important;
     background: #fff !important;
+    z-index: 90 !important;
   }
   .nav.visible ul {
     display: flex !important;
@@ -55,6 +56,20 @@
   }
   .add_musics {
     padding: 0% 5% !important;
+  }
+  .add_modal {
+    height: 500px;
+    overflow-y: scroll;
+  }
+  .form_music .form_input {
+    display: flex !important;
+    width: 100% !important;
+    height: 20px !important;
+    font-size: 15px;
+    padding: 0 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 }
 @media screen and (min-width: 991px) {

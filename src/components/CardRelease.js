@@ -12,6 +12,7 @@ import {
   putMysql,
 } from "../db/DatabaseComponent";
 import { resources } from "../i18n";
+import { InputField, InputMusic, SelectField, SelectDate } from "./Inputs_Selects_etc";
 
 class CardRelease extends Component {
   constructor(props) {
@@ -120,14 +121,35 @@ class CardRelease extends Component {
 
   handleInputChange = (event) => {
     const { name, value, files } = event.target;
+    const err = document.getElementById("format_err");
 
     if (!files) {
-      this.setState((prevState) => ({
-        musics: {
-          ...prevState.musics,
-          [name]: value,
-        },
-      }));
+      if (name === "timeTokTokMusic") {
+        if (parseFloat(value) > 3) {
+          this.setState({
+            musics: {
+              ...this.state.musics,
+              [name]: value,
+            },
+          });
+          err.innerText = "You can not more than 3 minutes";
+        } else {
+          this.setState({
+            musics: {
+              ...this.state.musics,
+              [name]: value,
+            },
+          });
+          err.innerText = "";
+        }
+      } else {
+        this.setState({
+          musics: {
+            ...this.state.musics,
+            [name]: value,
+          },
+        });
+      }
     } else {
       const file = files[0];
       const fileUrl = URL.createObjectURL(file);
@@ -144,15 +166,35 @@ class CardRelease extends Component {
 
   handleEditInputChange = (event) => {
     const { name, value, files } = event.target;
+    const err = document.getElementById("format_err");
 
     if (!files) {
-      this.setState((prevState) => ({
-        editMusic: {
-          ...prevState.editMusic,
-          [name]: value,
-        },
-      }));
-      console.log(this.state.editMusic);
+      if (name === "timeTokTokMusic") {
+        if (parseFloat(value) > 3) {
+          this.setState({
+            editMusic: {
+              ...this.state.editMusic,
+              [name]: value,
+            },
+          });
+          err.innerText = "You can not more than 3 minutes";
+        } else {
+          this.setState({
+            editMusic: {
+              ...this.state.editMusic,
+              [name]: value,
+            },
+          });
+          err.innerText = "";
+        }
+      } else {
+        this.setState({
+          editMusic: {
+            ...this.state.editMusic,
+            [name]: value,
+          },
+        });
+      }
     }
   };
 
@@ -173,9 +215,9 @@ class CardRelease extends Component {
   };
 
   handleDeleteClick = (id) => {
-    const deleteConfirmed = window.confirm(
-      "¿Estás seguro de borrar esta versión?"
-    );
+    const { language } = this.state;
+    const translate = resources[language].translation;
+    const deleteConfirmed = window.confirm(translate.createMusic.deleteMusic);
     if (deleteConfirmed) {
       deleteMysqlMusics(id);
       window.location.reload();
@@ -183,11 +225,13 @@ class CardRelease extends Component {
   };
 
   renderAddMusicModal() {
+    const { language } = this.state;
+    const translate = resources[language].translation;
     return this.state.showModal ? (
       <div className="add_modal">
-        <h2>Agrega la música</h2>
+        <h2>{translate.createMusic.titleCreateMusic}</h2>
         <InputField
-          label="Titulo de la canción"
+          label={translate.createMusic.titleMusic}
           id="titleMusic"
           name="titleMusic"
           value={this.state.musics.titleMusic || null}
@@ -195,7 +239,7 @@ class CardRelease extends Component {
           required={true}
         />
         <InputField
-          label="Verión de la canción"
+          label={translate.createMusic.releaseMusic}
           id="releaseMusic"
           name="releaseMusic"
           value={this.state.musics.releaseMusic || null}
@@ -203,7 +247,7 @@ class CardRelease extends Component {
           required={false}
         />
         <InputField
-          label="Agrega el artista secundario"
+          label={translate.createMusic.addArtistSecondary}
           id="addArtistSecondary"
           name="addArtistSecondary"
           value={this.state.musics.addArtistSecondary || null}
@@ -226,33 +270,52 @@ class CardRelease extends Component {
           </div>
           <InputMusic
             id="add_music"
-            label="Sube tu audio `.wav` aquí!"
+            label={translate.createMusic.addMusic}
             name="addMusic"
             onChange={(event) => this.handleInputChange(event)}
           />
         </div>
         <SelectField
-          label="Ingrese el tipo de contenido"
+          label={translate.createMusic.typeContent.label}
           id="typeContent"
           name="typeContent"
           value={this.state.musics.typeContent || null}
-          options={["Explisito", "Limpio"]}
+          options={[
+            translate.createMusic.typeContent.explicit,
+            translate.createMusic.typeContent.clean,
+          ]}
           onChange={(event) => this.handleInputChange(event)}
           required={true}
         />
+        <div className="form_input">
+          <span>{translate.createMusic.timeTokTokMusic}</span>
+          <input
+            type="number"
+            id="timeTokTokMusic"
+            name="timeTokTokMusic"
+            value={this.state.musics.timeTokTokMusic || null}
+            onChange={(event) => this.handleInputChange(event)}
+          />
+          <span
+            id="format_err"
+            style={{ fontSize: "10px", color: "red" }}
+          ></span>
+          <span style={{ fontSize: "10px" }}>max 3.00</span>
+        </div>
         <SelectField
-          label="Estuvo esta canción en las tiendas?"
+          label={translate.createMusic.wasInStores.label}
           id="wasInStores"
           name="wasInStores"
           value={this.state.musics.wasInStores || null}
-          options={["Si", "No"]}
+          options={["Yes", "No"]}
           onChange={this.handleInputChange}
           required={true}
         />
-        {this.state.musics.wasInStores === "Si" ? (
+        {this.state.musics.wasInStores ===
+        translate.createMusic.wasInStores.yes ? (
           <>
             <InputField
-              label="Agrega el codigo ISRC"
+              label={translate.createMusic.codeISRC}
               id="codeISRC"
               name="codeISRC"
               value={this.state.musics.codeISRC || null}
@@ -260,7 +323,7 @@ class CardRelease extends Component {
               required={true}
             />
             <SelectDate
-              label="Ingrese la fecha en la que salió la canción"
+              label={translate.createMusic.dateLaunchMusic}
               id="dateLaunchMusic"
               name="dateLaunchMusic"
               value={this.state.musics.dateLaunchMusic || null}
@@ -270,8 +333,12 @@ class CardRelease extends Component {
           </>
         ) : null}
 
-        <button onClick={this.sendMusic}>Guardar</button>
-        <button onClick={this.closeModal}>Cancelar</button>
+        <button onClick={this.sendMusic}>
+          {translate.createMusic.buttonSave}
+        </button>
+        <button onClick={this.closeModal}>
+          {translate.createMusic.buttonCancel}
+        </button>
       </div>
     ) : null;
   }
@@ -334,11 +401,13 @@ class CardRelease extends Component {
   }
 
   renderEditMusicModal() {
+    const { language } = this.state;
+    const translate = resources[language].translation;
     return this.state.showModalEdit ? (
       <div className="add_modal">
-        <h2>Edita la música</h2>
+        <h2>{translate.createMusic.titleEditMusic}</h2>
         <InputField
-          label="Titulo de la canción"
+          label={translate.createMusic.titleMusic}
           id="titleMusic"
           name="titleMusic"
           value={this.state.editMusic.titleMusic || null}
@@ -346,7 +415,7 @@ class CardRelease extends Component {
           required={true}
         />
         <InputField
-          label="Verión de la canción"
+          label={translate.createMusic.releaseMusic}
           id="releaseMusic"
           name="releaseMusic"
           value={this.state.editMusic.releaseMusic || null}
@@ -354,7 +423,7 @@ class CardRelease extends Component {
           required={false}
         />
         <InputField
-          label="Edita el artista secundario"
+          label={translate.createMusic.addArtistSecondary}
           id="addArtistSecondary"
           name="addArtistSecondary"
           value={this.state.editMusic.addArtistSecondary || null}
@@ -362,14 +431,62 @@ class CardRelease extends Component {
           required={false}
         />
         <SelectField
-          label="Ingrese el tipo de contenido"
+          label={translate.createMusic.typeContent.label}
           id="typeContent"
           name="typeContent"
           value={this.state.editMusic.typeContent || null}
-          options={["Explisito", "Limpio"]}
+          options={[
+            translate.createMusic.typeContent.explicit,
+            translate.createMusic.typeContent.clean,
+          ]}
           onChange={(event) => this.handleEditInputChange(event)}
           required={true}
         />
+        <div className="form_input">
+          <span>{translate.createMusic.timeTokTokMusic}</span>
+          <input
+            type="number"
+            id="timeTokTokMusic"
+            name="timeTokTokMusic"
+            value={this.state.editMusic.timeTokTokMusic || null}
+            onChange={(event) => this.handleEditInputChange(event)}
+          />
+          <span
+            id="format_err"
+            style={{ fontSize: "10px", color: "red" }}
+          ></span>
+          <span style={{ fontSize: "10px" }}>max 3.00</span>
+        </div>
+        <SelectField
+          label={translate.createMusic.wasInStores.label}
+          id="wasInStores"
+          name="wasInStores"
+          value={this.state.editMusic.wasInStores || null}
+          options={["Yes", "No"]}
+          onChange={this.handleEditInputChange}
+          required={true}
+        />
+        {this.state.editMusic.wasInStores === "Yes" ||
+        this.state.editMusic.wasInStores === 1 ? (
+          <>
+            <InputField
+              label={translate.createMusic.codeISRC}
+              id="codeISRC"
+              name="codeISRC"
+              value={this.state.editMusic.codeISRC || null}
+              onChange={this.handleEditInputChange}
+              required={true}
+            />
+            <SelectDate
+              label={translate.createMusic.dateLaunchMusic}
+              id="dateLaunchMusic"
+              name="dateLaunchMusic"
+              value={this.state.editMusic.dateLaunchMusic || null}
+              onChange={(event) => this.handleEditInputChange(event)}
+              required={true}
+            />
+          </>
+        ) : null}
 
         <button onClick={() => this.putMusic(this.state.editMusic.id)}>
           Guardar
@@ -385,16 +502,20 @@ class CardRelease extends Component {
       return <div>Loading...</div>;
     }
     const translate = resources[language].translation;
-    const typeRelease = releases.typeRelease === "Album" ? translate.createRelease.addTypeLaunch.optionQuarter : releases.typeRelease === "EP" ? translate.createRelease.addTypeLaunch.optionTertiary : releases.typeRelease === "Sencillo" ? translate.createRelease.addTypeLaunch.optionSecondary : null;
-
-    console.log(typeRelease);
-
+    const typeLaunch =
+      releases.typeLaunch === "Album"
+        ? translate.createRelease.addTypeLaunch.optionQuarter
+        : releases.typeLaunch === "EP"
+        ? translate.createRelease.addTypeLaunch.optionTertiary
+        : releases.typeLaunch === "Sencillo"
+        ? translate.createRelease.addTypeLaunch.optionSecondary
+        : null;
     return (
       <section>
         <div className="header_release">
           <div className="img_header_release">
             <img
-              src={`http://localhost:5000/uploads/${releases.addImageLaunch}`}
+              src={`${process.env.REACT_APP_URL_API}uploads/${releases.addImageLaunch}`}
               alt="Portada de la versión"
             />
           </div>
@@ -408,7 +529,7 @@ class CardRelease extends Component {
             <div className="info_type_launch">
               <p>
                 {translate.createMusic.typeRelease} <br />
-                <span>{releases.typeLaunch}</span>
+                <span>{typeLaunch}</span>
               </p>
             </div>
             <div className="info_artist">
@@ -419,8 +540,7 @@ class CardRelease extends Component {
             </div>
             <div className="info_genre">
               <p>
-                {translate.createMusic.genreRelease} {releases.typeLaunch}:{" "}
-                <br />
+                {translate.createMusic.genreRelease} {typeLaunch}: <br />
                 <span>{releases.addGenres}</span>
               </p>
             </div>
@@ -498,7 +618,7 @@ class CardRelease extends Component {
                       </label>
                       <audio controls id={`audio_${index}`}>
                         <source
-                          src={`http://localhost:5000/uploads/${music.addMusic}`}
+                          src={`${process.env.REACT_APP_URL_API}uploads/${music.addMusic}`}
                           type="audio/wav"
                         />
                         Your browser does not support the audio element.
@@ -506,10 +626,12 @@ class CardRelease extends Component {
                       <div className="artist_secondary">
                         <p>
                           {music.addArtistSecondary
-                            ? `Artista secundario: ${music.addArtistSecondary}`
+                            ? `${translate.createMusic.artistMusicSecu} ${music.addArtistSecondary}`
                             : null}
                         </p>
-                        <p>{translate.createMusic.typeMusic} {music.typeContent}</p>
+                        <p>
+                          {translate.createMusic.typeMusic} {music.typeContent}
+                        </p>
                       </div>
                     </div>
                     <div className="card_info_icons">
@@ -536,16 +658,16 @@ class CardRelease extends Component {
         </div>
         {(this.state.releases.typeLaunch === "Album" &&
           this.state.musics.length !== 15) ||
-        (this.state.releases.typeLaunch === "MP" &&
+        (this.state.releases.typeLaunch === "EP" &&
           this.state.musics.length !== 8) ||
-        (this.state.releases.typeLaunch === "Sencillo" &&
+        (this.state.releases.typeLaunch === "Single" &&
           this.state.musics.length !== 1) ? (
           <div className="add_musics" onClick={this.openModal}>
             +
           </div>
         ) : (
           <button className="pay_button" onClick={this.handleOpenPaypal}>
-            Pagar
+            Pay
           </button>
         )}
         {this.renderEditMusicModal()}
@@ -557,81 +679,3 @@ class CardRelease extends Component {
 }
 
 export default CardRelease;
-
-function InputField({ label, id, name, value, onChange, required }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} {required ? <span style={{ color: "red" }}>*</span> : null}
-      </label>
-      <input
-        type="text"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      />
-    </div>
-  );
-}
-
-function InputMusic({ id, label, name, onChange }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>{label}</label>
-      <input
-        required
-        type="file"
-        id={id}
-        name={name}
-        onChange={onChange}
-        accept="audio/wav"
-      />
-    </div>
-  );
-}
-
-function SelectField({ label, id, name, value, options, onChange, required }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} {required ? <span style={{ color: "red" }}>*</span> : null}
-      </label>
-      <select
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      >
-        <option disabled selected>
-          Seleccione uno
-        </option>
-        {options.map((optionValue) => (
-          <option key={optionValue} value={optionValue}>
-            {optionValue}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-function SelectDate({ label, id, name, value, onChange }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} <span style={{ color: "red" }}>*</span>
-      </label>
-      <input
-        type="date"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required
-      />
-    </div>
-  );
-}

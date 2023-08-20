@@ -9,7 +9,7 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 export async function checkDuplicateReleaseTitle(titleRelease) {
   const user_id = localStorage.getItem("user_id");
   try {
-    const response = await axios.get(`http://localhost:5000/api/releases/${titleRelease}/${user_id}`);
+    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/releases/${titleRelease}/${user_id}`);
     return response.data.length > 0;
   } catch (error) {
     console.error("Error checking duplicate release title:", error);
@@ -19,7 +19,7 @@ export async function checkDuplicateReleaseTitle(titleRelease) {
 
 export async function checkDuplicateMusicsTitle(titleMusic, release_id) {
   try {
-    const response = await axios.get(`http://localhost:5000/api/musics/${titleMusic}/${release_id}`);
+    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/musics/${titleMusic}/${release_id}`);
     return response.data.length > 0;
   } catch (error) {
     console.error("Error checking duplicate release title:", error);
@@ -29,7 +29,7 @@ export async function checkDuplicateMusicsTitle(titleMusic, release_id) {
 
 export async function getMysql(user_id) {
   try {
-    const response = await axios.get(`http://localhost:5000/api/releases?user_id=${user_id}`);
+    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/releases?user_id=${user_id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -39,7 +39,7 @@ export async function getMysql(user_id) {
 
 export async function getMysqlMusics(release_id) {
   try {
-    const response = await axios.get(`http://localhost:5000/api/musics?release_id=${release_id}`);
+    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/musics?release_id=${release_id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -50,7 +50,7 @@ export async function getMysqlMusics(release_id) {
 export async function postMysql(data) {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/releases",
+      "${process.env.REACT_APP_URL_API}api/releases",
       data,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -68,7 +68,7 @@ export async function postMysql(data) {
 export async function postMysqlMusics(data) {
   try {
     const response = await axios.post(
-      "http://localhost:5000/api/musics",
+      "${process.env.REACT_APP_URL_API}api/musics",
       data,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -86,7 +86,7 @@ export async function postMysqlMusics(data) {
 export async function putMysql(versionId, data) {
   try {
     const response = await axios.put(
-      `http://localhost:5000/api/releases/${versionId}`,
+      `${process.env.REACT_APP_URL_API}api/releases/${versionId}`,
       data,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -104,7 +104,7 @@ export async function putMysql(versionId, data) {
 export async function putMysqlMusics(musicId, data) {
   try {
     const response = await axios.put(
-      `http://localhost:5000/api/musics/${musicId}`,
+      `${process.env.REACT_APP_URL_API}api/musics/${musicId}`,
       data
     );
 
@@ -119,7 +119,7 @@ export async function putMysqlMusics(musicId, data) {
 export async function putMysqlPago(versionId, data) {
   try {
     const response = await axios.put(
-      `http://localhost:5000/api/releases/pago/${versionId}`,
+      `${process.env.REACT_APP_URL_API}api/releases/pago/${versionId}`,
       data,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -137,7 +137,7 @@ export async function putMysqlPago(versionId, data) {
 export async function deleteMysql(versionId) {
   try {
     const response = await axios.delete(
-      `http://localhost:5000/api/releases/${versionId}`
+      `${process.env.REACT_APP_URL_API}api/releases/${versionId}`
     );
     console.log("Data deleted successfully");
     return response.data;
@@ -150,7 +150,7 @@ export async function deleteMysql(versionId) {
 export async function deleteMysqlMusics(musicId) {
   try {
     const response = await axios.delete(
-      `http://localhost:5000/api/musics/${musicId}`
+      `${process.env.REACT_APP_URL_API}api/musics/${musicId}`
     );
     console.log("Data deleted successfully");
     return response.data;

@@ -10,9 +10,9 @@ function Header() {
   const [showMenu, setShowMenu] = useState(false);
   const [showLanguage, setShowLanguage] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    localStorage.getItem("language") || "es"
+    localStorage.getItem("language") || "Español"
   );
-  const languages = ["es", "en", "fr", "ca", "po", "it"];
+  const languages = ["Español", "Ingles", "Frances", "Catalan", "Portugues", "Italiano"];
 
   const handleShowMenu = () => {
     setShowMenu(!showMenu);
@@ -30,10 +30,14 @@ function Header() {
     window.location.reload();
   };
 
+  const currentURL = window.location.href;
+  const urlApp = process.env.REACT_APP_URL_APP;
+  const shouldShowLinks = currentURL === urlApp;
+  
   return (
     <header>
       <div className="logo">
-        <Link to="/dashboard">
+        <Link to={shouldShowLinks ? "/" : "/dashboard"}>
           <h1>Rotz Empire</h1>
         </Link>
       </div>
@@ -47,16 +51,11 @@ function Header() {
           </li>
           <li>
             <Link to="/dashboard">
-              {t(resources[selectedLanguage].translation.header.artist)}
-            </Link>
-          </li>
-          <li>
-            <Link to="/dashboard">
               {t(resources[selectedLanguage].translation.header.reports)}
             </Link>
           </li>
           <li>
-            <Link to="/dashboard">
+            <Link to="/support">
               {t(resources[selectedLanguage].translation.header.support)}
             </Link>
           </li>
@@ -65,6 +64,20 @@ function Header() {
               {t(resources[selectedLanguage].translation.header.account)}
             </Link>
           </li>
+          {shouldShowLinks && (
+            <>
+              <li>
+                <Link to="/login">
+                  {t(resources[selectedLanguage].translation.header.login)}
+                </Link>
+              </li>
+              <li>
+                <Link to="/register">
+                  {t(resources[selectedLanguage].translation.header.register)}
+                </Link>
+              </li>
+            </>
+          )}
           <li>
             <div className="language" onClick={handleClickLanguage}>
               <FontAwesomeIcon icon={faGlobe} />

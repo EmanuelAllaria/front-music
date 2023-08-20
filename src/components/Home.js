@@ -15,8 +15,10 @@ import {
   putMysql,
   deleteMysql,
   getMysqlMusics,
+  deleteMysqlMusics,
 } from "../db/DatabaseComponent";
 import { resources } from "../i18n";
+import { InputField, InputImage, SelectField, SelectDate, SelectTime } from "./Inputs_Selects_etc";
 
 class Home extends Component {
   constructor(props) {
@@ -69,8 +71,8 @@ class Home extends Component {
       id: release.id,
       titulo: release.title,
       artista: release.addArtist,
-      image: `http://localhost:5000/uploads/${release.addImage}`,
-      audio: `http://localhost:5000/uploads/${release.addMusic}`,
+      image: `${process.env.REACT_APP_URL_API}uploads/${release.addImage}`,
+      audio: `${process.env.REACT_APP_URL_API}uploads/${release.addMusic}`,
       prodAnio: release.prodYear,
       genero_primaro: release.addGenresPrimary,
       genero_secundario: release.addGenresSecondary,
@@ -163,13 +165,20 @@ class Home extends Component {
     }
   };
 
-  handleDeleteClick = (id) => {
+  handleDeleteClick = async (id) => {
     const { language } = this.state;
     const translate = resources[language].translation;
     const deleteConfirmed = window.confirm(translate.deleteRelease.alert);
+
     if (deleteConfirmed) {
-      deleteMysql(id);
-      window.location.reload();
+      try {
+        const response = await getMysqlMusics(id);
+        deleteMysql(id);
+        response.map((music) => deleteMysqlMusics(music.id));
+        window.location.reload();
+      } catch (err) {
+        console.error("Error", err);
+      }
     }
   };
 
@@ -235,15 +244,6 @@ class Home extends Component {
   render() {
     const { showModal, editReleases, addImageLaunch, language } = this.state;
     const translate = resources[language].translation;
-    const typeLaunch = this.state.releases.map((release) =>
-      release.typeLaunch === "Album"
-        ? translate.createRelease.addTypeLaunch.optionQuarter
-        : release.typeLaunch === "EP"
-        ? translate.createRelease.addTypeLaunch.optionTertiary
-        : release.typeLaunch === "Sencillo"
-        ? translate.createRelease.addTypeLaunch.optionSecondary
-        : null
-    );
     return (
       <section>
         <div className="text_dashboard">
@@ -252,9 +252,7 @@ class Home extends Component {
           </h2>
           <br />
           <p style={{ fontWeight: 700, fontSize: "20px" }}>
-            {translate.home.subtitle[0]} <br />
-            <br />
-            {translate.home.subtitle[1]}
+            {translate.home.subtitle}
           </p>
         </div>
         <div className="cards_create_music">
@@ -282,11 +280,11 @@ class Home extends Component {
               this.state.releases.map((release, index) => (
                 <div className="card_release" key={index}>
                   <div className="card_img">
-                    <span>{typeLaunch}</span>
+                    <span>{release.typeLaunch}</span>
                     <div className="img_card">
                       <img
                         key={index}
-                        src={`http://localhost:5000/uploads/${release.addImageLaunch}`}
+                        src={`${process.env.REACT_APP_URL_API}uploads/${release.addImageLaunch}`}
                         alt=""
                       />
                     </div>
@@ -295,7 +293,7 @@ class Home extends Component {
                     <div className="card_info_text">
                       <h3>{release.titleRelease}</h3>
                       <p>
-                        {typeLaunch} {translate.home.typeCard}
+                        {release.typeLaunch} {translate.home.typeCard}
                         <br /> <strong>{release.addArtist}</strong>
                       </p>
                       <span>{release.dateLauch} </span>
@@ -460,96 +458,3 @@ class Home extends Component {
 }
 
 export default Home;
-
-function InputField({ label, id, name, value, onChange, required }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} {required ? <span style={{ color: "red" }}>*</span> : null}
-      </label>
-      <input
-        type="text"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      />
-    </div>
-  );
-}
-
-function InputImage({ id, name, onChange }) {
-  return (
-    <div className="form_input">
-      <input
-        required
-        type="file"
-        id={id}
-        name={name}
-        onChange={onChange}
-        accept="image/png,image/jpg,image/jpeg"
-      />
-    </div>
-  );
-}
-
-function SelectField({ label, id, name, value, options, onChange, required }) {
-  const language = localStorage.getItem("language") || "es";
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} {required ? <span style={{ color: "red" }}>*</span> : null}
-      </label>
-      <select
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      >
-        <option disabled selected>
-          {resources[language].translation.createRelease.addTypeLaunch.label}
-        </option>
-        {options.map((optionValue) => (
-          <option key={optionValue} value={optionValue}>
-            {optionValue}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-function SelectDate({ label, id, name, value, onChange }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} <span style={{ color: "red" }}>*</span>
-      </label>
-      <input
-        type="date"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required
-      />
-    </div>
-  );
-}
-
-function SelectTime({ label, id, name, value, onChange }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>{label}</label>
-      <input
-        type="time"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  );
-}

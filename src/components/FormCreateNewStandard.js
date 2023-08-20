@@ -9,6 +9,7 @@ import {
   checkDuplicateReleaseTitle,
 } from "../db/DatabaseComponent";
 import { resources } from "../i18n";
+import { InputField, InputImage, SelectField, SelectDate, SelectTime } from "./Inputs_Selects_etc";
 
 class FormCreateNewStandard extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class FormCreateNewStandard extends Component {
       language: localStorage.getItem("language") || "es",
     };
     this.paypalButtonRef = React.createRef();
-    this.fileInputRef = React.createRef();
+    // this.fileInputRef = React.createRef();
   }
 
   componentDidMount() {
@@ -81,52 +82,6 @@ class FormCreateNewStandard extends Component {
       .catch((error) => {
         console.error("Error getting releases:", error);
       });
-  };
-
-  validateImage = () => {
-    const fileInput = this.fileInputRef.current;
-    const maxFileSizeMB = 36;
-    const maxImageSize = 3000;
-    const allowedExtensions = ["jpg", "jpeg", "png", "tiff"];
-
-    const file = fileInput.files[0];
-
-    if (file) {
-      const fileSizeMB = file.size / (1024 * 1024);
-      const fileExtension = file.name.split(".").pop().toLowerCase();
-
-      if (fileSizeMB > maxFileSizeMB) {
-        this.setState({
-          errorMessage: "La imagen excede el tamaño máximo permitido.",
-        });
-        fileInput.value = "";
-        return;
-      }
-
-      if (!allowedExtensions.includes(fileExtension)) {
-        this.setState({
-          errorMessage: `Formato de archivo no permitido. Por favor, elija una imagen en formato ${allowedExtensions.join(
-            ", "
-          )}`,
-        });
-        fileInput.value = "";
-        return;
-      }
-
-      const img = new Image();
-      img.onload = () => {
-        if (img.width > maxImageSize || img.height > maxImageSize) {
-          this.setState({
-            errorMessage: `La imagen debe tener un tamaño máximo de ${maxImageSize}x${maxImageSize} píxeles.`,
-          });
-          fileInput.value = "";
-          return;
-        }
-
-        this.setState({ errorMessage: "" });
-      };
-      img.src = URL.createObjectURL(file);
-    }
   };
 
   handleInputChange = (event) => {
@@ -330,7 +285,7 @@ class FormCreateNewStandard extends Component {
                     id="addImageLaunch"
                     name="addImageLaunch"
                     onChange={(event) => this.handleInputChange(event)}
-                    ref={this.fileInputRef}
+                    // ref={this.fileInputRef}
                   />
                 </div>
               </div>
@@ -384,11 +339,7 @@ class FormCreateNewStandard extends Component {
                   id="typeLaunch"
                   name="typeLaunch"
                   value={this.state.releases.typeLaunch || null}
-                  options={[
-                    translate.createRelease.addTypeLaunch.optionSecondary,
-                    translate.createRelease.addTypeLaunch.optionTertiary,
-                    translate.createRelease.addTypeLaunch.optionQuarter,
-                  ]}
+                  options={["Single", "EP", "Album"]}
                   onChange={(event) => this.handleInputChange(event)}
                   required={true}
                 />
@@ -406,7 +357,7 @@ class FormCreateNewStandard extends Component {
                   required
                   type="submit"
                   value={translate.createRelease.buttonNext}
-                  onClick={this.validateImage}
+                  // onClick={this.validateImage}
                 />
                 {this.state.errorMessage && (
                   <p style={{ color: "red" }}>{this.state.errorMessage}</p>
@@ -422,99 +373,3 @@ class FormCreateNewStandard extends Component {
 }
 
 export default FormCreateNewStandard;
-
-function InputField({ label, id, name, value, onChange, required }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} {required ? <span style={{ color: "red" }}>*</span> : null}
-      </label>
-      <input
-        type="text"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      />
-    </div>
-  );
-}
-
-function InputImage({ id, name, onChange, ref }) {
-  return (
-    <div className="form_input">
-      <input
-        required
-        type="file"
-        id={id}
-        name={name}
-        onChange={onChange}
-        accept="image/png,image/jpg,image/tiff"
-        ref={ref}
-        title="Hola"
-        placeholder="hola que tal"
-      />
-    </div>
-  );
-}
-
-function SelectField({ label, id, name, value, options, onChange, required }) {
-  const language = localStorage.getItem("language") || "es";
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} {required ? <span style={{ color: "red" }}>*</span> : null}
-      </label>
-      <select
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-      >
-        <option disabled selected>
-          {resources[language].translation.createRelease.addTypeLaunch.label}
-        </option>
-        {options.map((optionValue) => (
-          <option key={optionValue} value={optionValue}>
-            {optionValue}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-}
-
-function SelectDate({ label, id, name, value, onChange }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>
-        {label} <span style={{ color: "red" }}>*</span>
-      </label>
-      <input
-        type="date"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required
-      />
-    </div>
-  );
-}
-
-function SelectTime({ label, id, name, value, onChange }) {
-  return (
-    <div className="form_input">
-      <label htmlFor={id}>{label}</label>
-      <input
-        type="time"
-        id={id}
-        name={name}
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  );
-}

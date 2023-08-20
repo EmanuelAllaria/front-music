@@ -9,7 +9,7 @@ function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/register", {
+      const response = await axios.post(`${process.env.REACT_APP_URL_API}api/register`, {
         name,
         email,
         password,
@@ -18,6 +18,7 @@ function Register() {
       if (response.data && response.data.user_id && response.data.token) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user_id", response.data.user_id);
+        window.location.href = "/dashboard";
       } else {
         console.log("Error al registrarse");
       }
