@@ -1,0 +1,17 @@
+.page-index .hero {
+  margin: 32px 0;
+  padding: 48px;
+  border-radius: var(--border-radius);
+  background: linear-gradient(
+    135deg,
+    rgba(91, 140, 255, 0.18),
+    rgba(34, 211, 238, 0.14)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-md);
+}
+.page-index .hero .actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+}
