@@ -1,12 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { resources } from "../i18n";
-import { getLanguageResourceKey, getTranslate } from "../utils/i18nHelpers";
+import { getTranslate } from "../utils/i18nHelpers";
 
 function Footer() {
-  // Normalize language from localStorage
-  const language = getLanguageResourceKey();
-
   return (
     <footer className="footer">
       <div className="container">

@@ -11,15 +11,6 @@ const CODE_TO_NAME = {
   fr: "Frances",
 };
 
-const NAME_TO_CODE = {
-  Español: "es",
-  Ingles: "en",
-  Portugues: "pt",
-  Catalan: "ca",
-  Italiano: "it",
-  Frances: "fr",
-};
-
 export function getLanguageResourceKey(raw) {
   const stored = raw || localStorage.getItem("language");
   if (!stored) return "Español";
