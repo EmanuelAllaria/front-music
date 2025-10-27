@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
-import { PayPalButton } from "react-paypal-button-v2";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import {
   getMysql,
   getMysqlMusics,
@@ -11,8 +11,13 @@ import {
   checkDuplicateMusicsTitle,
   putMysql,
 } from "../db/DatabaseComponent";
-import { resources } from "../i18n";
-import { InputField, InputMusic, SelectField, SelectDate } from "./Inputs_Selects_etc";
+import { getTranslate } from "../utils/i18nHelpers";
+import {
+  InputField,
+  InputMusic,
+  SelectField,
+  SelectDate,
+} from "./Inputs_Selects_etc";
 
 class CardRelease extends Component {
   constructor(props) {
@@ -25,7 +30,6 @@ class CardRelease extends Component {
       showModal: false,
       showModalEdit: false,
       paymentComplete: false,
-      language: localStorage.getItem("language") || "es",
     };
     // this.handleSubmitEmail = this.handleSubmitEmail.bind(this);
   }
@@ -215,8 +219,7 @@ class CardRelease extends Component {
   };
 
   handleDeleteClick = (id) => {
-    const { language } = this.state;
-    const translate = resources[language].translation;
+    const translate = getTranslate();
     const deleteConfirmed = window.confirm(translate.createMusic.deleteMusic);
     if (deleteConfirmed) {
       deleteMysqlMusics(id);
@@ -225,8 +228,7 @@ class CardRelease extends Component {
   };
 
   renderAddMusicModal() {
-    const { language } = this.state;
-    const translate = resources[language].translation;
+    const translate = getTranslate();
     return this.state.showModal ? (
       <div className="add_modal">
         <h2>{translate.createMusic.titleCreateMusic}</h2>
@@ -375,18 +377,32 @@ class CardRelease extends Component {
           <FontAwesomeIcon icon={faX} onClick={this.handleClosePaypal} />
           <h2>Pagar con PayPal</h2>
           {!paymentComplete ? (
-            <PayPalButton
-              id="paypal"
-              amount="10.00"
-              currency="USD"
-              onSuccess={() => this.handlePaymentSuccess(release)}
-              onError={(err) => console.log("error" + err)}
+            <PayPalScriptProvider
               options={{
-                clientId:
+                "client-id":
                   "AYSWUWk3WY0kjWfvWAvyxXUwa_25hULgufIV8vMz6_bekBfp-Ew8x-qMgLc2ZHcBTXWFuSUsMf4Azcj-",
+                currency: "USD",
               }}
-              ref={this.paypalButtonRef}
-            />
+            >
+              <PayPalButtons
+                style={{ layout: "vertical" }}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: { value: "10.00", currency_code: "USD" },
+                      },
+                    ],
+                  });
+                }}
+                onApprove={(data, actions) => {
+                  return actions.order.capture().then((details) => {
+                    this.handlePaymentSuccess(details, release);
+                  });
+                }}
+                onError={(err) => console.log("error" + err)}
+              />
+            </PayPalScriptProvider>
           ) : (
             <>
               <p>Pago completado. ¡Gracias por tu compra!</p>
@@ -401,8 +417,7 @@ class CardRelease extends Component {
   }
 
   renderEditMusicModal() {
-    const { language } = this.state;
-    const translate = resources[language].translation;
+    const translate = getTranslate();
     return this.state.showModalEdit ? (
       <div className="add_modal">
         <h2>{translate.createMusic.titleEditMusic}</h2>
@@ -497,11 +512,11 @@ class CardRelease extends Component {
   }
 
   render() {
-    const { releases, language } = this.state;
+    const { releases } = this.state;
     if (!releases || !releases.dateLaunch) {
       return <div>Loading...</div>;
     }
-    const translate = resources[language].translation;
+    const translate = getTranslate();
     const typeLaunch =
       releases.typeLaunch === "Album"
         ? translate.createRelease.addTypeLaunch.optionQuarter

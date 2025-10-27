@@ -1,105 +1,136 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { resources } from "../i18n";
+import {
+  availableLanguages,
+  getLanguageResourceKey,
+  setLanguage,
+  getTranslate,
+} from "../utils/i18nHelpers";
 
 function Header() {
-  const { t, i18n } = useTranslation();
-  const [showMenu, setShowMenu] = useState(false);
-  const [showLanguage, setShowLanguage] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState(
-    localStorage.getItem("language") || "Español"
-  );
-  const languages = ["Español", "Ingles", "Frances", "Catalan", "Portugues", "Italiano"];
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const language = getLanguageResourceKey();
 
-  const handleShowMenu = () => {
-    setShowMenu(!showMenu);
-  };
-
-  const handleClickLanguage = () => {
-    setShowLanguage(!showLanguage);
-  };
-
-  const handleLanguageSelect = (language) => {
-    setSelectedLanguage(language);
-    localStorage.setItem("language", language);
-    i18n.changeLanguage(language);
-    setShowLanguage(false);
+  const handleLanguageChange = (newLanguage) => {
+    setLanguage(newLanguage);
+    setShowLanguageMenu(false);
     window.location.reload();
   };
 
-  const currentURL = window.location.href;
-  const urlApp = process.env.REACT_APP_URL_APP;
-  const shouldShowLinks = currentURL === urlApp;
-  
   return (
-    <header>
-      <div className="logo">
-        <Link to={shouldShowLinks ? "/" : "/dashboard"}>
-          <h1>Rotz Empire</h1>
-        </Link>
-      </div>
-      <FontAwesomeIcon icon={faBars} onClick={handleShowMenu} />
-      <nav className={`nav ${showMenu ? "visible" : ""}`}>
-        <ul>
-          <li>
+    <header className="header">
+      <div className="container">
+        <div className="header-content">
+          <Link to="/dashboard" className="header-logo">
+            <img src="/logo.png" alt="Music Platform" />
+            <span>Music Platform</span>
+          </Link>
+
+          <nav className="header-nav">
             <Link to="/dashboard">
-              {t(resources[selectedLanguage].translation.header.music)}
+              {getTranslate().header?.music || "Music"}
             </Link>
-          </li>
-          <li>
-            <Link to="/dashboard">
-              {t(resources[selectedLanguage].translation.header.reports)}
+            <Link to="/create-new-version">
+              {getTranslate().home?.buttonReleaseCreate || "Crear Nuevo"}
             </Link>
-          </li>
-          <li>
             <Link to="/support">
-              {t(resources[selectedLanguage].translation.header.support)}
+              {getTranslate().header?.support || "Support"}
             </Link>
-          </li>
-          <li>
-            <Link to="/dashboard">
-              {t(resources[selectedLanguage].translation.header.account)}
+            <Link to="/reports">
+              {getTranslate().header?.reports || "Reportes"}
             </Link>
-          </li>
-          {shouldShowLinks && (
-            <>
-              <li>
-                <Link to="/login">
-                  {t(resources[selectedLanguage].translation.header.login)}
-                </Link>
-              </li>
-              <li>
-                <Link to="/register">
-                  {t(resources[selectedLanguage].translation.header.register)}
-                </Link>
-              </li>
-            </>
-          )}
-          <li>
-            <div className="language" onClick={handleClickLanguage}>
-              <FontAwesomeIcon icon={faGlobe} />
-              <p>{t(selectedLanguage)}</p>
-              <span>›</span>
+            <Link to="/account">
+              {getTranslate().header?.account || "Mi Cuenta"}
+            </Link>
+          </nav>
+
+          <div className="header-actions">
+            <div
+              className="language-selector"
+              onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+              style={{
+                position: "relative",
+                cursor: "pointer",
+                padding: "8px 16px",
+                background: "rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px",
+                color: "white",
+                fontWeight: "500",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                transition: "all 0.2s ease",
+              }}
+            >
+              <span>🌐</span>
+              <span>{language}</span>
+              <span
+                style={{
+                  transform: showLanguageMenu
+                    ? "rotate(180deg)"
+                    : "rotate(0deg)",
+                  transition: "transform 0.2s ease",
+                }}
+              >
+                ▼
+              </span>
+
+              {showLanguageMenu && (
+                <div
+                  className="language-menu"
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    right: "0",
+                    marginTop: "8px",
+                    background: "white",
+                    border: "1px solid #e5e7eb",
+                    borderRadius: "12px",
+                    boxShadow:
+                      "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+                    padding: "8px",
+                    minWidth: "150px",
+                    zIndex: 1000,
+                  }}
+                >
+                  {availableLanguages.map((key) => (
+                    <div
+                      key={key}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLanguageChange(key);
+                      }}
+                      style={{
+                        padding: "8px 12px",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                        color: "#374151",
+                        fontWeight: language === key ? "600" : "400",
+                        background:
+                          language === key ? "#f0f4ff" : "transparent",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (language !== key) {
+                          e.target.style.background = "#f9fafb";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (language !== key) {
+                          e.target.style.background = "transparent";
+                        }
+                      }}
+                    >
+                      {key}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-            {showLanguage && (
-              <ul className="language-menu">
-                {languages.map((lang) => (
-                  <li
-                    key={lang}
-                    onClick={() => handleLanguageSelect(lang)}
-                    className={selectedLanguage === lang ? "selected" : ""}
-                  >
-                    {lang}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        </ul>
-      </nav>
+          </div>
+        </div>
+      </div>
     </header>
   );
 }

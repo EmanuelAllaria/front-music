@@ -22,6 +22,62 @@ export const resources = {
       },
       footer: {
         copy: "All rights reserved.",
+        description:
+          "Your professional music platform for distribution and release management.",
+      },
+      navigation: "Navigation",
+      help: "Help",
+      // Dashboard/Home top-level keys
+      dashboard: "Dashboard",
+      dashboard_subtitle: "Manage your music releases",
+      create_new_version: "Create New",
+      total_releases: "Total Releases",
+      published: "Published",
+      total_streams: "Total Streams",
+      revenue: "Revenue",
+      your_releases: "Your Releases",
+      view_reports: "View Reports",
+      no_releases: "No releases",
+      create_first_release:
+        "Create your first release to start distributing your music across all digital platforms.",
+      // Index (landing) page keys
+      index: {
+        new_music_era: "New Music Era",
+        hero_title_prefix: "Distribute your music",
+        hero_title_suffix: "worldwide",
+        hero_subtitle:
+          "The most advanced platform for independent artists. Upload, manage and distribute your music to 150+ platforms with professional tools and detailed analytics.",
+        start_now: "Start Now",
+        create_release: "Create Release",
+        stat_platforms_label: "Platforms",
+        stat_artists_label: "Artists",
+        stat_songs_label: "Songs",
+        why_choose_platform: "Why choose our platform?",
+        features_subtitle:
+          "Professional tools designed for the success of your music",
+        feature_distribution_title: "Global Distribution",
+        feature_distribution_desc:
+          "Reach audiences worldwide with distribution to Spotify, Apple Music, YouTube Music and 150+ platforms.",
+        feature_analytics_title: "Advanced Analytics",
+        feature_analytics_desc:
+          "Get detailed insights about your audience, plays, revenue, and growth trends.",
+        feature_revenue_title: "Maximum Revenue",
+        feature_revenue_desc:
+          "Keep 100% of your rights and receive transparent payments with no hidden fees.",
+        feature_fast_title: "Fast Release",
+        feature_fast_desc:
+          "Publish your music to all platforms in under 24 hours with our automated system.",
+        feature_creative_title: "Creative Tools",
+        feature_creative_desc:
+          "Metadata editor, UPC/ISRC generator, and integrated promotion tools.",
+        feature_protection_title: "Total Protection",
+        feature_protection_desc:
+          "Your music is protected with blockchain technology and enterprise-grade security.",
+        cta_title: "Ready to take your music to the next level?",
+        cta_subtitle:
+          "Join thousands of artists who already trust our platform to distribute their music",
+        cta_create_account: "Create Free Account",
+        cta_support: "Talk to Support",
       },
       home: {
         title: ["Upload your", "Music"],
@@ -118,6 +174,37 @@ export const resources = {
         audio: "Upload audio",
         send: "Send ticket",
       },
+      reports: {
+        total_streams: "Total Streams",
+        total_revenue: "Total Revenue",
+        total_plays: "Total Plays",
+        unique_listeners: "Unique Listeners",
+        change_prev_month_pos: "+% change vs previous month",
+        streams_per_day: "Streams per Day",
+        distribution_by_platform: "Distribution by Platform",
+        top_tracks: "Top Tracks",
+      },
+      account: {
+        actions: { change_photo: "📷 Change Photo" },
+        stats: { releases: "Releases", streams: "Streams", months: "Months" },
+        fields: {
+          name: "Full Name",
+          email: "Email",
+          phone: "Phone",
+          country: "Country",
+          city: "City",
+          website: "Website",
+        },
+        messages: {
+          profile_updated: "Profile updated successfully",
+          passwords_not_match: "Passwords do not match",
+          password_updated: "Password updated successfully",
+          logout_confirm: "Are you sure you want to log out?",
+          logout_success: "Logged out successfully",
+          delete_confirm: "Are you COMPLETELY sure? This cannot be undone.",
+          delete_success: "Account deleted. We're sorry to see you go.",
+        },
+      },
     },
   },
   Español: {
@@ -140,6 +227,62 @@ export const resources = {
       },
       footer: {
         copy: "Todos los derechos reservados.",
+        description:
+          "Tu plataforma de música profesional para distribución y gestión de lanzamientos.",
+      },
+      navigation: "Navegación",
+      help: "Ayuda",
+      // Dashboard/Home top-level keys
+      dashboard: "Panel",
+      dashboard_subtitle: "Gestiona tus lanzamientos musicales",
+      create_new_version: "Crear Nuevo",
+      total_releases: "Total Lanzamientos",
+      published: "Publicados",
+      total_streams: "Total Streams",
+      revenue: "Ingresos",
+      your_releases: "Tus Lanzamientos",
+      view_reports: "Ver Reportes",
+      no_releases: "No hay lanzamientos",
+      create_first_release:
+        "Crea tu primer lanzamiento para comenzar a distribuir tu música en todas las plataformas digitales.",
+      // Index (landing) page keys
+      index: {
+        new_music_era: "Nueva Era Musical",
+        hero_title_prefix: "Distribuye tu música",
+        hero_title_suffix: "en todo el mundo",
+        hero_subtitle:
+          "La plataforma más avanzada para artistas independientes. Sube, gestiona y distribuye tu música en más de 150 plataformas digitales con herramientas profesionales y análisis detallados.",
+        start_now: "Comenzar Ahora",
+        create_release: "Crear Lanzamiento",
+        stat_platforms_label: "Plataformas",
+        stat_artists_label: "Artistas",
+        stat_songs_label: "Canciones",
+        why_choose_platform: "¿Por qué elegir nuestra plataforma?",
+        features_subtitle:
+          "Herramientas profesionales diseñadas para el éxito de tu música",
+        feature_distribution_title: "Distribución Global",
+        feature_distribution_desc:
+          "Llega a audiencias de todo el mundo con distribución en Spotify, Apple Music, YouTube Music y más de 150 plataformas.",
+        feature_analytics_title: "Analytics Avanzados",
+        feature_analytics_desc:
+          "Obtén insights detallados sobre tu audiencia, reproducciones, ingresos y tendencias de crecimiento.",
+        feature_revenue_title: "Máximos Ingresos",
+        feature_revenue_desc:
+          "Mantén el 100% de tus derechos y recibe pagos transparentes sin comisiones ocultas.",
+        feature_fast_title: "Lanzamiento Rápido",
+        feature_fast_desc:
+          "Publica tu música en todas las plataformas en menos de 24 horas con nuestro sistema automatizado.",
+        feature_creative_title: "Herramientas Creativas",
+        feature_creative_desc:
+          "Editor de metadatos, generador de códigos UPC/ISRC y herramientas de promoción integradas.",
+        feature_protection_title: "Protección Total",
+        feature_protection_desc:
+          "Tu música está protegida con tecnología blockchain y sistemas de seguridad de nivel empresarial.",
+        cta_title: "¿Listo para llevar tu música al siguiente nivel?",
+        cta_subtitle:
+          "Únete a miles de artistas que ya confían en nuestra plataforma para distribuir su música",
+        cta_create_account: "Crear Cuenta Gratis",
+        cta_support: "Hablar con Soporte",
       },
       home: {
         title: ["Sube tu", "Música"],
@@ -238,6 +381,38 @@ export const resources = {
         audio: "Carga de audio",
         send: "Enviar ticket",
       },
+      reports: {
+        total_streams: "Reproducciones Totales",
+        total_revenue: "Ingresos Totales",
+        total_plays: "Reproducciones",
+        unique_listeners: "Oyentes Únicos",
+        change_prev_month_pos: "+% vs mes anterior",
+        streams_per_day: "Streams por Día",
+        distribution_by_platform: "Distribución por Plataforma",
+        top_tracks: "Top Canciones",
+      },
+      account: {
+        actions: { change_photo: "📷 Cambiar Foto" },
+        stats: { releases: "Releases", streams: "Streams", months: "Meses" },
+        fields: {
+          name: "Nombre Completo",
+          email: "Email",
+          phone: "Teléfono",
+          country: "País",
+          city: "Ciudad",
+          website: "Sitio Web",
+        },
+        messages: {
+          profile_updated: "Perfil actualizado exitosamente",
+          passwords_not_match: "Las contraseñas no coinciden",
+          password_updated: "Contraseña actualizada exitosamente",
+          logout_confirm: "¿Estás seguro de que quieres cerrar sesión?",
+          logout_success: "Sesión cerrada exitosamente",
+          delete_confirm:
+            "¿Estás COMPLETAMENTE seguro? Esta acción no se puede deshacer.",
+          delete_success: "Cuenta eliminada. Lamentamos verte partir.",
+        },
+      },
     },
   },
   Portugues: {
@@ -260,6 +435,62 @@ export const resources = {
       },
       footer: {
         copy: "Todos os direitos reservados.",
+        description:
+          "Sua plataforma profissional de música para distribuição e gestão de lançamentos.",
+      },
+      navigation: "Navegação",
+      help: "Ajuda",
+      // Dashboard/Home top-level keys
+      dashboard: "Painel",
+      dashboard_subtitle: "Gerencie seus lançamentos musicais",
+      create_new_version: "Criar Novo",
+      total_releases: "Total de Lançamentos",
+      published: "Publicados",
+      total_streams: "Streams Totais",
+      revenue: "Receita",
+      your_releases: "Seus Lançamentos",
+      view_reports: "Ver Relatórios",
+      no_releases: "Sem lançamentos",
+      create_first_release:
+        "Crie seu primeiro lançamento para começar a distribuir sua música em todas as plataformas digitais.",
+      // Index (landing) page keys
+      index: {
+        new_music_era: "Nova Era Musical",
+        hero_title_prefix: "Distribua sua música",
+        hero_title_suffix: "em todo o mundo",
+        hero_subtitle:
+          "A plataforma mais avançada para artistas independentes. Faça upload, gerencie e distribua sua música para mais de 150 plataformas com ferramentas profissionais e análises detalhadas.",
+        start_now: "Começar Agora",
+        create_release: "Criar Lançamento",
+        stat_platforms_label: "Plataformas",
+        stat_artists_label: "Artistas",
+        stat_songs_label: "Canções",
+        why_choose_platform: "Por que escolher nossa plataforma?",
+        features_subtitle:
+          "Ferramentas profissionais projetadas para o sucesso de sua música",
+        feature_distribution_title: "Distribuição Global",
+        feature_distribution_desc:
+          "Alcance audiências em todo o mundo com distribuição para Spotify, Apple Music, YouTube Music e mais de 150 plataformas.",
+        feature_analytics_title: "Analytics Avançados",
+        feature_analytics_desc:
+          "Obtenha insights detalhados sobre sua audiência, reproduções, receita e tendências de crescimento.",
+        feature_revenue_title: "Máxima Receita",
+        feature_revenue_desc:
+          "Mantenha 100% de seus direitos e receba pagamentos transparentes sem taxas ocultas.",
+        feature_fast_title: "Lançamento Rápido",
+        feature_fast_desc:
+          "Publique sua música em todas as plataformas em menos de 24 horas com nosso sistema automatizado.",
+        feature_creative_title: "Ferramentas Criativas",
+        feature_creative_desc:
+          "Editor de metadados, gerador de códigos UPC/ISRC e ferramentas de promoção integradas.",
+        feature_protection_title: "Proteção Total",
+        feature_protection_desc:
+          "Sua música é protegida com tecnologia blockchain e segurança de nível empresarial.",
+        cta_title: "Pronto para levar sua música ao próximo nível?",
+        cta_subtitle:
+          "Junte-se a milhares de artistas que já confiam em nossa plataforma para distribuir sua música",
+        cta_create_account: "Criar Conta Gratuita",
+        cta_support: "Falar com o Suporte",
       },
       home: {
         title: ["Carregue o seu", "Música"],
@@ -356,6 +587,37 @@ export const resources = {
         audio: "Carregar áudio",
         send: "Enviar ticket",
       },
+      reports: {
+        total_streams: "Streams Totais",
+        total_revenue: "Receita Total",
+        total_plays: "Reproduções",
+        unique_listeners: "Ouvintes Únicos",
+        change_prev_month_pos: "+% vs mês anterior",
+        streams_per_day: "Streams por Dia",
+        distribution_by_platform: "Distribuição por Plataforma",
+        top_tracks: "Top Músicas",
+      },
+      account: {
+        actions: { change_photo: "📷 Alterar Foto" },
+        stats: { releases: "Lançamentos", streams: "Streams", months: "Meses" },
+        fields: {
+          name: "Nome Completo",
+          email: "Email",
+          phone: "Telefone",
+          country: "País",
+          city: "Cidade",
+          website: "Site",
+        },
+        messages: {
+          profile_updated: "Perfil atualizado com sucesso",
+          passwords_not_match: "As senhas não coincidem",
+          password_updated: "Senha atualizada com sucesso",
+          logout_confirm: "Tem certeza de que deseja sair?",
+          logout_success: "Sessão encerrada com sucesso",
+          delete_confirm: "Tem CERTEZA? Esta ação não pode ser desfeita.",
+          delete_success: "Conta excluída. Lamentamos ver você partir.",
+        },
+      },
     },
   },
   Catalan: {
@@ -378,6 +640,62 @@ export const resources = {
       },
       footer: {
         copy: "Tots els drets reservats.",
+        description:
+          "La teva plataforma de música professional per a distribució i gestió de llançaments.",
+      },
+      navigation: "Navegació",
+      help: "Ajuda",
+      // Dashboard/Home top-level keys
+      dashboard: "Tauler",
+      dashboard_subtitle: "Gestiona els teus llançaments musicals",
+      create_new_version: "Crear Nou",
+      total_releases: "Total Llançaments",
+      published: "Publicats",
+      total_streams: "Reproduccions Totals",
+      revenue: "Ingressos",
+      your_releases: "Els Teus Llançaments",
+      view_reports: "Veure Informes",
+      no_releases: "Sense llançaments",
+      create_first_release:
+        "Crea el teu primer llançament per començar a distribuir la teva música a totes les plataformes digitals.",
+      // Index (landing) page keys
+      index: {
+        new_music_era: "Nova Era Musical",
+        hero_title_prefix: "Distribueix la teva música",
+        hero_title_suffix: "a tot el món",
+        hero_subtitle:
+          "La plataforma més avançada per a artistes independents. Puja, gestiona i distribueix la teva música a més de 150 plataformes amb eines professionals i anàlisis detallades.",
+        start_now: "Començar Ara",
+        create_release: "Crear Llançament",
+        stat_platforms_label: "Plataformes",
+        stat_artists_label: "Artistes",
+        stat_songs_label: "Cançons",
+        why_choose_platform: "Per què escollir la nostra plataforma?",
+        features_subtitle:
+          "Eines professionals dissenyades per a l'èxit de la teva música",
+        feature_distribution_title: "Distribució Global",
+        feature_distribution_desc:
+          "Arriba a audiències d'arreu del món amb distribució a Spotify, Apple Music, YouTube Music i més de 150 plataformes.",
+        feature_analytics_title: "Analytics Avançats",
+        feature_analytics_desc:
+          "Obté insights detallats sobre la teva audiència, reproduccions, ingressos i tendències de creixement.",
+        feature_revenue_title: "Ingressos Màxims",
+        feature_revenue_desc:
+          "Mantén el 100% dels teus drets i rep pagaments transparents sense comissions ocultes.",
+        feature_fast_title: "Llançament Ràpid",
+        feature_fast_desc:
+          "Publica la teva música a totes les plataformes en menys de 24 hores amb el nostre sistema automatitzat.",
+        feature_creative_title: "Eines Creatives",
+        feature_creative_desc:
+          "Editor de metadades, generador de codis UPC/ISRC i eines de promoció integrades.",
+        feature_protection_title: "Protecció Total",
+        feature_protection_desc:
+          "La teva música està protegida amb tecnologia blockchain i sistemes de seguretat d'empresa.",
+        cta_title: "Preparat per portar la teva música al següent nivell?",
+        cta_subtitle:
+          "Uneix-te a milers d'artistes que ja confien en la nostra plataforma per distribuir la seva música",
+        cta_create_account: "Crear Compte Gratis",
+        cta_support: "Parlar amb Suport",
       },
       home: {
         title: ["Puja el teu", "Música"],
@@ -474,6 +792,42 @@ export const resources = {
         audio: "Puja d'àudio",
         send: "Enviar tiquet",
       },
+      reports: {
+        total_streams: "Reproduccions Totals",
+        total_revenue: "Ingressos Totals",
+        total_plays: "Reproduccions",
+        unique_listeners: "Oients Únics",
+        change_prev_month_pos: "+% vs mes anterior",
+        streams_per_day: "Reproduccions per Dia",
+        distribution_by_platform: "Distribució per Plataforma",
+        top_tracks: "Millors Cançons",
+      },
+      account: {
+        actions: { change_photo: "📷 Canviar Foto" },
+        stats: {
+          releases: "Llançaments",
+          streams: "Reproduccions",
+          months: "Mesos",
+        },
+        fields: {
+          name: "Nom Complet",
+          email: "Email",
+          phone: "Telèfon",
+          country: "País",
+          city: "Ciutat",
+          website: "Lloc Web",
+        },
+        messages: {
+          profile_updated: "Perfil actualitzat correctament",
+          passwords_not_match: "Les contrasenyes no coincideixen",
+          password_updated: "Contrasenya actualitzada correctament",
+          logout_confirm: "Estàs segur que vols tancar sessió?",
+          logout_success: "Sessió tancada correctament",
+          delete_confirm:
+            "Estàs COMPLETAMENT segur? Aquesta acció no es pot desfer.",
+          delete_success: "Compte eliminat. Ens sap greu veure't marxar.",
+        },
+      },
     },
   },
   Italiano: {
@@ -496,6 +850,62 @@ export const resources = {
       },
       footer: {
         copy: "Tutti i diritti riservati.",
+        description:
+          "La tua piattaforma musicale professionale per distribuzione e gestione delle pubblicazioni.",
+      },
+      navigation: "Navigazione",
+      help: "Aiuto",
+      // Dashboard/Home top-level keys
+      dashboard: "Dashboard",
+      dashboard_subtitle: "Gestisci le tue pubblicazioni musicali",
+      create_new_version: "Crea Nuova",
+      total_releases: "Pubblicazioni Totali",
+      published: "Pubblicati",
+      total_streams: "Stream Totali",
+      revenue: "Entrate",
+      your_releases: "Le Tue Pubblicazioni",
+      view_reports: "Vedi Report",
+      no_releases: "Nessuna pubblicazione",
+      create_first_release:
+        "Crea la tua prima pubblicazione per iniziare a distribuire la tua musica su tutte le piattaforme digitali.",
+      // Index (landing) page keys
+      index: {
+        new_music_era: "Nuova Era Musicale",
+        hero_title_prefix: "Distribuisci la tua musica",
+        hero_title_suffix: "in tutto il mondo",
+        hero_subtitle:
+          "La piattaforma più avanzata per artisti indipendenti. Carica, gestisci e distribuisci la tua musica su oltre 150 piattaforme con strumenti professionali e analisi dettagliate.",
+        start_now: "Inizia Ora",
+        create_release: "Crea Pubblicazione",
+        stat_platforms_label: "Piattaforme",
+        stat_artists_label: "Artisti",
+        stat_songs_label: "Canzoni",
+        why_choose_platform: "Perché scegliere la nostra piattaforma?",
+        features_subtitle:
+          "Strumenti professionali progettati per il successo della tua musica",
+        feature_distribution_title: "Distribuzione Globale",
+        feature_distribution_desc:
+          "Raggiungi pubblici in tutto il mondo con distribuzione su Spotify, Apple Music, YouTube Music e oltre 150 piattaforme.",
+        feature_analytics_title: "Analytics Avanzati",
+        feature_analytics_desc:
+          "Ottieni approfondimenti dettagliati sul tuo pubblico, riproduzioni, entrate e tendenze di crescita.",
+        feature_revenue_title: "Entrate Massime",
+        feature_revenue_desc:
+          "Mantieni il 100% dei tuoi diritti e ricevi pagamenti trasparenti senza commissioni nascoste.",
+        feature_fast_title: "Pubblicazione Rapida",
+        feature_fast_desc:
+          "Pubblica la tua musica su tutte le piattaforme in meno di 24 ore con il nostro sistema automatizzato.",
+        feature_creative_title: "Strumenti Creativi",
+        feature_creative_desc:
+          "Editor di metadati, generatore di codici UPC/ISRC e strumenti di promozione integrati.",
+        feature_protection_title: "Protezione Totale",
+        feature_protection_desc:
+          "La tua musica è protetta con tecnologia blockchain e sicurezza di livello aziendale.",
+        cta_title: "Pronto a portare la tua musica al livello successivo?",
+        cta_subtitle:
+          "Unisciti a migliaia di artisti che già si affidano alla nostra piattaforma per distribuire la loro musica",
+        cta_create_account: "Crea Account Gratuito",
+        cta_support: "Parla con il Supporto",
       },
       home: {
         title: ["Carica il tuo", "Musica"],
@@ -592,6 +1002,38 @@ export const resources = {
         audio: "Carica audio",
         send: "Invia ticket",
       },
+      reports: {
+        total_streams: "Stream Totali",
+        total_revenue: "Entrate Totali",
+        total_plays: "Riproduzioni",
+        unique_listeners: "Ascoltatori Unici",
+        change_prev_month_pos: "+% vs mese precedente",
+        streams_per_day: "Stream per Giorno",
+        distribution_by_platform: "Distribuzione per Piattaforma",
+        top_tracks: "Brani Top",
+      },
+      account: {
+        actions: { change_photo: "📷 Cambia Foto" },
+        stats: { releases: "Pubblicazioni", streams: "Stream", months: "Mesi" },
+        fields: {
+          name: "Nome Completo",
+          email: "Email",
+          phone: "Telefono",
+          country: "Paese",
+          city: "Città",
+          website: "Sito Web",
+        },
+        messages: {
+          profile_updated: "Profilo aggiornato con successo",
+          passwords_not_match: "Le password non coincidono",
+          password_updated: "Password aggiornata con successo",
+          logout_confirm: "Sei sicuro di voler uscire?",
+          logout_success: "Disconnessione riuscita",
+          delete_confirm:
+            "Sei COMPLETAMENTE sicuro? Questa azione è irrevocabile.",
+          delete_success: "Account eliminato. Ci dispiace vederti andare.",
+        },
+      },
     },
   },
   Frances: {
@@ -614,6 +1056,62 @@ export const resources = {
       },
       footer: {
         copy: "Tous droits réservés.",
+        description:
+          "Ta plateforme musicale professionnelle pour la distribution et la gestion des sorties.",
+      },
+      navigation: "Navigation",
+      help: "Aide",
+      // Dashboard/Home top-level keys
+      dashboard: "Tableau de bord",
+      dashboard_subtitle: "Gérez vos sorties musicales",
+      create_new_version: "Créer Nouveau",
+      total_releases: "Sorties Totales",
+      published: "Publiés",
+      total_streams: "Flux Totaux",
+      revenue: "Revenus",
+      your_releases: "Vos Sorties",
+      view_reports: "Voir Rapports",
+      no_releases: "Aucune sortie",
+      create_first_release:
+        "Crée ta première sortie pour commencer à distribuer ta musique sur toutes les plateformes numériques.",
+      // Index (landing) page keys
+      index: {
+        new_music_era: "Nouvelle Ère Musicale",
+        hero_title_prefix: "Distribue ta musique",
+        hero_title_suffix: "dans le monde entier",
+        hero_subtitle:
+          "La plateforme la plus avancée pour les artistes indépendants. Téléverse, gère et distribue ta musique sur plus de 150 plateformes avec des outils professionnels et des analyses détaillées.",
+        start_now: "Commencer Maintenant",
+        create_release: "Créer Sortie",
+        stat_platforms_label: "Plateformes",
+        stat_artists_label: "Artistes",
+        stat_songs_label: "Chansons",
+        why_choose_platform: "Pourquoi choisir notre plateforme ?",
+        features_subtitle:
+          "Des outils professionnels conçus pour le succès de ta musique",
+        feature_distribution_title: "Distribution Globale",
+        feature_distribution_desc:
+          "Atteins des publics du monde entier avec une distribution sur Spotify, Apple Music, YouTube Music et plus de 150 plateformes.",
+        feature_analytics_title: "Analyses Avancées",
+        feature_analytics_desc:
+          "Obtiens des informations détaillées sur ton audience, tes écoutes, tes revenus et tes tendances de croissance.",
+        feature_revenue_title: "Revenus Maximaux",
+        feature_revenue_desc:
+          "Conserve 100% de tes droits et reçois des paiements transparents sans frais cachés.",
+        feature_fast_title: "Sortie Rapide",
+        feature_fast_desc:
+          "Publie ta musique sur toutes les plateformes en moins de 24 heures grâce à notre système automatisé.",
+        feature_creative_title: "Outils Créatifs",
+        feature_creative_desc:
+          "Éditeur de métadonnées, générateur de codes UPC/ISRC et outils de promotion intégrés.",
+        feature_protection_title: "Protection Totale",
+        feature_protection_desc:
+          "Ta musique est protégée par la technologie blockchain et une sécurité de niveau entreprise.",
+        cta_title: "Prêt à porter ta musique au niveau supérieur ?",
+        cta_subtitle:
+          "Rejoins des milliers d'artistes qui font déjà confiance à notre plateforme pour distribuer leur musique",
+        cta_create_account: "Créer un Compte Gratuit",
+        cta_support: "Parler au Support",
       },
       home: {
         title: ["Téléchargez votre", "Musique"],
@@ -709,6 +1207,37 @@ export const resources = {
         image: "Télécharger le fichier",
         audio: "Télécharger l'audio",
         send: "Envoyer le ticket",
+      },
+      reports: {
+        total_streams: "Flux Totaux",
+        total_revenue: "Revenus Totaux",
+        total_plays: "Lectures",
+        unique_listeners: "Auditeurs Uniques",
+        change_prev_month_pos: "+% par rapport au mois précédent",
+        streams_per_day: "Flux par Jour",
+        distribution_by_platform: "Répartition par Plateforme",
+        top_tracks: "Meilleurs Titres",
+      },
+      account: {
+        actions: { change_photo: "📷 Changer la Photo" },
+        stats: { releases: "Sorties", streams: "Flux", months: "Mois" },
+        fields: {
+          name: "Nom Complet",
+          email: "Email",
+          phone: "Téléphone",
+          country: "Pays",
+          city: "Ville",
+          website: "Site Web",
+        },
+        messages: {
+          profile_updated: "Profil mis à jour avec succès",
+          passwords_not_match: "Les mots de passe ne correspondent pas",
+          password_updated: "Mot de passe mis à jour avec succès",
+          logout_confirm: "Êtes-vous sûr de vouloir vous déconnecter ?",
+          logout_success: "Déconnecté avec succès",
+          delete_confirm: "Êtes-vous CERTAIN ? Cette action est irréversible.",
+          delete_success: "Compte supprimé. Désolé de vous voir partir.",
+        },
       },
     },
   },

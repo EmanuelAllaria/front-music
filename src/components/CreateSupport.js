@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import { resources } from "../i18n";
-import {
-  InputField,
-  SelectField,
-  TextArea,
-} from "./Inputs_Selects_etc";
+import { getTranslate } from "../utils/i18nHelpers";
+import { InputField, SelectField, TextArea } from "./Inputs_Selects_etc";
 
 function CreateSupport() {
-  const language = localStorage.getItem("language") || "es";
-  const translate = resources[language].translation;
+  const translate = getTranslate();
 
   const [typeSupport, setTypeSupport] = useState(null);
   const [subject, setSubject] = useState("");

@@ -9,7 +9,9 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 export async function checkDuplicateReleaseTitle(titleRelease) {
   const user_id = localStorage.getItem("user_id");
   try {
-    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/releases/${titleRelease}/${user_id}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL_API}api/releases/${titleRelease}/${user_id}`
+    );
     return response.data.length > 0;
   } catch (error) {
     console.error("Error checking duplicate release title:", error);
@@ -19,7 +21,9 @@ export async function checkDuplicateReleaseTitle(titleRelease) {
 
 export async function checkDuplicateMusicsTitle(titleMusic, release_id) {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/musics/${titleMusic}/${release_id}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL_API}api/musics/${titleMusic}/${release_id}`
+    );
     return response.data.length > 0;
   } catch (error) {
     console.error("Error checking duplicate release title:", error);
@@ -29,7 +33,9 @@ export async function checkDuplicateMusicsTitle(titleMusic, release_id) {
 
 export async function getMysql(user_id) {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/releases?user_id=${user_id}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL_API}api/releases?user_id=${user_id}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -39,7 +45,9 @@ export async function getMysql(user_id) {
 
 export async function getMysqlMusics(release_id) {
   try {
-    const response = await axios.get(`${process.env.REACT_APP_URL_API}api/musics?release_id=${release_id}`);
+    const response = await axios.get(
+      `${process.env.REACT_APP_URL_API}api/musics?release_id=${release_id}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -50,7 +58,7 @@ export async function getMysqlMusics(release_id) {
 export async function postMysql(data) {
   try {
     const response = await axios.post(
-      "${process.env.REACT_APP_URL_API}api/releases",
+      `${process.env.REACT_APP_URL_API}api/releases`,
       data,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -68,7 +76,7 @@ export async function postMysql(data) {
 export async function postMysqlMusics(data) {
   try {
     const response = await axios.post(
-      "${process.env.REACT_APP_URL_API}api/musics",
+      `${process.env.REACT_APP_URL_API}api/musics`,
       data,
       {
         headers: { "Content-Type": "multipart/form-data" },

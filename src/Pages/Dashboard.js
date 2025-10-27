@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 
 function Dashboard() {
   return (
-    <section>
+    <section className="page page-dashboard">
       <Header />
       <Home />
       <Footer />

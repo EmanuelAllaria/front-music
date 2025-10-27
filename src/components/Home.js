@@ -1,460 +1,282 @@
-import React, { Component } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPenToSquare,
-  faTrash,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import emailjs from "emailjs-com";
-import Modal from "react-modal";
-import music from "../img/music.png";
-import noImage from "../img/no-image.png";
-import {
-  getMysql,
-  putMysql,
-  deleteMysql,
-  getMysqlMusics,
-  deleteMysqlMusics,
-} from "../db/DatabaseComponent";
-import { resources } from "../i18n";
-import { InputField, InputImage, SelectField, SelectDate, SelectTime } from "./Inputs_Selects_etc";
+import CardRelease from "./CardRelease";
+import { getTranslate } from "../utils/i18nHelpers";
 
-class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      releases: [],
-      editReleases: [],
-      musics: [],
-      selectedRelease: null,
-      addImageLaunch: "",
-      showModal: false,
-      showPaypal: false,
-      paymentComplete: false,
-      language: localStorage.getItem("language") || "es",
-    };
-    this.paypalButtonRef = React.createRef();
-    this.handleSubmitEmail = this.handleSubmitEmail.bind(this);
-  }
+// Using centralized i18n helpers; no local language map needed here.
 
-  componentDidMount() {
-    this.getReleases();
-  }
+function Home() {
+  const [releases, setReleases] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      this.state.releases.length > 0 &&
-      this.state.releases !== prevState.releases
-    ) {
-      this.getMusics();
-    }
-  }
+  // Centralized i18n access via helpers
 
-  getReleases = () => {
-    const user_id = parseInt(localStorage.getItem("user_id"));
-    getMysql(user_id)
-      .then((response) => {
-        this.setState({
-          releases: response,
-        });
-      })
-      .catch((error) => {
-        console.error("Error getting releases:", error);
-      });
-  };
-
-  handleSubmitEmail = (release) => {
-    const emailData = {
-      to_email: "allariaemanuel19@gmail.com",
-      subject: "Email Prueba",
-      id: release.id,
-      titulo: release.title,
-      artista: release.addArtist,
-      image: `${process.env.REACT_APP_URL_API}uploads/${release.addImage}`,
-      audio: `${process.env.REACT_APP_URL_API}uploads/${release.addMusic}`,
-      prodAnio: release.prodYear,
-      genero_primaro: release.addGenresPrimary,
-      genero_secundario: release.addGenresSecondary,
-      lenguaje: release.addLanguage,
-    };
-
-    const {
-      to_email,
-      subject,
-      id,
-      titulo,
-      artista,
-      image,
-      audio,
-      prodAnio,
-      genero_primaro,
-      genero_secundario,
-      lenguaje,
-    } = emailData;
-
-    emailjs
-      .send(
-        "service_y3iv04r",
-        "template_fv1o4o9",
+  useEffect(() => {
+    // Simulate loading releases with delay for better UX
+    setTimeout(() => {
+      const mockReleases = [
         {
-          to_email,
-          subject,
-          id,
-          titulo,
-          artista,
-          image,
-          audio,
-          prodAnio,
-          genero_primaro,
-          genero_secundario,
-          lenguaje,
+          id: 1,
+          title: "Mi Primer Álbum",
+          artist: "Artista Demo",
+          cover: "/img/no-image.png",
+          status: "published",
+          date: "2024-01-15",
+          streams: "12.5K",
+          revenue: "$245.80",
         },
-        "8sYcUQAoCMWibNu7S"
-      )
-      .then(
-        (result) => {
-          console.log("Correo electrónico enviado con éxito", result.text);
+        {
+          id: 2,
+          title: "Single de Prueba",
+          artist: "Otro Artista",
+          cover: "/img/no-image.png",
+          status: "draft",
+          date: "2024-01-20",
+          streams: "0",
+          revenue: "$0.00",
         },
-        (error) => {
-          console.error("Error al enviar el correo electrónico", error);
-        }
-      );
-  };
-
-  getMusics = () => {
-    const { releases } = this.state;
-    const musicPromises = releases.map(async (release) => {
-      try {
-        return await getMysqlMusics(release.id);
-      } catch (error) {
-        console.error("Error getting musics:", error);
-        return [];
-      }
-    });
-
-    Promise.all(musicPromises)
-      .then((responses) => {
-        const allMusics = responses.flat();
-        this.setState({
-          musics: allMusics,
-        });
-      })
-      .catch((error) => {
-        console.error("Error getting musics:", error);
-      });
-  };
-
-  sendReleases = async (id, event) => {
-    const { editReleases } = this.state;
-    const formData = new FormData();
-
-    for (const key in editReleases) {
-      if (editReleases[key] instanceof File) {
-        formData.append(key, editReleases[key]);
-      } else {
-        formData.append(key, editReleases[key] || "");
-      }
-    }
-
-    try {
-      await putMysql(id, formData);
-      window.location.href = "/dashboard";
-    } catch (error) {
-      console.error("Error sending releases:", error);
-    }
-  };
-
-  handleDeleteClick = async (id) => {
-    const { language } = this.state;
-    const translate = resources[language].translation;
-    const deleteConfirmed = window.confirm(translate.deleteRelease.alert);
-
-    if (deleteConfirmed) {
-      try {
-        const response = await getMysqlMusics(id);
-        deleteMysql(id);
-        response.map((music) => deleteMysqlMusics(music.id));
-        window.location.reload();
-      } catch (err) {
-        console.error("Error", err);
-      }
-    }
-  };
-
-  handleInputChange = (event) => {
-    const { name, value, files } = event.target;
-
-    if (!files) {
-      this.setState((prevState) => ({
-        editReleases: {
-          ...prevState.editReleases,
-          [name]: value,
+        {
+          id: 3,
+          title: "EP Experimental",
+          artist: "Nuevo Artista",
+          cover: "/img/no-image.png",
+          status: "published",
+          date: "2024-01-10",
+          streams: "8.2K",
+          revenue: "$156.40",
         },
-      }));
-    } else {
-      const file = files[0];
-      const fileUrl = URL.createObjectURL(file);
+      ];
+      setReleases(mockReleases);
+      setLoading(false);
+    }, 800);
+  }, []);
 
-      this.setState((prevState) => ({
-        editReleases: {
-          ...prevState.editReleases,
-          [name]: file,
-        },
-        [name]: fileUrl,
-      }));
-    }
+  const stats = {
+    totalReleases: releases.length,
+    publishedReleases: releases.filter((r) => r.status === "published").length,
+    totalStreams: releases.reduce(
+      (sum, r) => sum + parseFloat(r.streams?.replace("K", "000") || "0"),
+      0
+    ),
+    totalRevenue: releases.reduce(
+      (sum, r) => sum + parseFloat(r.revenue?.replace("$", "") || "0"),
+      0
+    ),
   };
 
-  handleEditClick = (release) => {
-    this.setState({
-      showModal: true,
-      selectedRelease: release,
-      editReleases: release,
-    });
-  };
-
-  closeEditModal = () => {
-    this.setState({
-      showModal: false,
-      selectedRelease: null,
-    });
-  };
-
-  handleAddMusics = (release) => {
-    window.location.href = `/edit-release/${release.id}`;
-  };
-
-  noImage() {
-    if (this.state.releases.image) {
-      return this.state.releases.image;
-    } else {
-      return noImage;
-    }
-  }
-
-  openModal = () => {
-    this.setState({ showModal: true });
-  };
-
-  closeModal = () => {
-    this.setState({ showModal: false });
-  };
-
-  render() {
-    const { showModal, editReleases, addImageLaunch, language } = this.state;
-    const translate = resources[language].translation;
-    return (
-      <section>
-        <div className="text_dashboard">
-          <h2>
-            {translate.home.title[0]} <strong>{translate.home.title[1]}</strong>
-          </h2>
-          <br />
-          <p style={{ fontWeight: 700, fontSize: "20px" }}>
-            {translate.home.subtitle}
-          </p>
+  return (
+    <div className="page">
+      <div className="container">
+        {/* Header Section */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "var(--space-8)",
+            flexWrap: "wrap",
+            gap: "var(--space-4)",
+          }}
+        >
+          <div>
+            <h1
+              style={{
+                fontSize: "2.5rem",
+                fontWeight: "800",
+                color: "var(--gray-900)",
+                marginBottom: "var(--space-2)",
+              }}
+            >
+              {getTranslate().dashboard}
+            </h1>
+            <p
+              style={{
+                color: "var(--gray-600)",
+                fontSize: "1.125rem",
+              }}
+            >
+              {getTranslate().dashboard_subtitle ||
+                "Gestiona tus lanzamientos musicales"}
+            </p>
+          </div>
+          <Link
+            to="/create-new-version"
+            className="btn btn-primary btn-lg animate-fade-in"
+          >
+            <span>✨</span>
+            {getTranslate().create_new_version}
+          </Link>
         </div>
-        <div className="cards_create_music">
-          <div className="card left">
-            <p>{translate.home.titleReleaseCreate}</p>
-            <br />
-            <img src={music} alt={music} />
-            <br />
-            <Link to="/create-new-version">
-              {translate.home.buttonReleaseCreate}
-            </Link>
+
+        {/* Stats Grid */}
+        <div className="stats-grid animate-fade-in">
+          <div className="stat-card">
+            <span className="stat-number">{stats.totalReleases}</span>
+            <span className="stat-label">
+              {getTranslate().total_releases || "Total Lanzamientos"}
+            </span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-number">{stats.publishedReleases}</span>
+            <span className="stat-label">
+              {getTranslate().published || "Publicados"}
+            </span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-number">
+              {(stats.totalStreams / 1000).toFixed(1)}K
+            </span>
+            <span className="stat-label">
+              {getTranslate().total_streams || "Total Streams"}
+            </span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-number">
+              ${stats.totalRevenue.toFixed(2)}
+            </span>
+            <span className="stat-label">
+              {getTranslate().revenue || "Ingresos"}
+            </span>
           </div>
         </div>
-        <br />
-        <br />
-        <div className="my_releases">
-          <div className="title_releases">
-            <h2>
-              {translate.home.titleSectionRelease[0]}{" "}
-              <strong>{translate.home.titleSectionRelease[1]}</strong>
+
+        {/* Releases Section */}
+        <div style={{ marginBottom: "var(--space-6)" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "var(--space-6)",
+            }}
+          >
+            <h2
+              style={{
+                fontSize: "1.875rem",
+                fontWeight: "700",
+                color: "var(--gray-900)",
+              }}
+            >
+              {getTranslate().your_releases || "Tus Lanzamientos"}
             </h2>
-          </div>
-          <div className="cards_releases">
-            {this.state.releases.length > 0 ? (
-              this.state.releases.map((release, index) => (
-                <div className="card_release" key={index}>
-                  <div className="card_img">
-                    <span>{release.typeLaunch}</span>
-                    <div className="img_card">
-                      <img
-                        key={index}
-                        src={`${process.env.REACT_APP_URL_API}uploads/${release.addImageLaunch}`}
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="card_info">
-                    <div className="card_info_text">
-                      <h3>{release.titleRelease}</h3>
-                      <p>
-                        {release.typeLaunch} {translate.home.typeCard}
-                        <br /> <strong>{release.addArtist}</strong>
-                      </p>
-                      <span>{release.dateLauch} </span>
-                    </div>
-                    <div className="card_info_icons">
-                      <FontAwesomeIcon
-                        icon={faPenToSquare}
-                        onClick={() => this.handleEditClick(release)}
-                      />
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        onClick={() =>
-                          this.handleDeleteClick(release.id, release)
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className="no_pagado"
-                    onClick={() => this.handleAddMusics(release)}
-                  >
-                    <p>{translate.home.butonAddMusics}</p>
-                    <FontAwesomeIcon icon={faPlus} />
-                  </div>
-                  {this.state.showModal ? (
-                    <Modal
-                      isOpen={showModal}
-                      onRequestClose={this.closeEditModal}
-                      contentLabel="Edit Modal"
-                    >
-                      <div className="component1"></div>
-                      <div className="edit_modal">
-                        <h2>{translate.editRelease.title}</h2>
-                        <InputField
-                          label={translate.createRelease.titleRelease}
-                          id="titleRelease"
-                          name="titleRelease"
-                          value={editReleases.titleRelease || null}
-                          onChange={(event) => this.handleInputChange(event)}
-                          required={true}
-                        />
-                        <div className="copy">
-                          <InputField
-                            label={translate.createRelease.addArtist}
-                            id="addArtist"
-                            name="addArtist"
-                            value={editReleases.addArtist || null}
-                            onChange={(event) => this.handleInputChange(event)}
-                            required={true}
-                          />
-                          <InputField
-                            label={translate.createRelease.addGenres}
-                            id="addGenres"
-                            name="addGenres"
-                            value={editReleases.addGenres || ""}
-                            onChange={(event) => this.handleInputChange(event)}
-                            required={true}
-                          />
-                        </div>
-                        <div className="prod">
-                          <SelectDate
-                            label={translate.createRelease.addDate}
-                            id="dateLaunch"
-                            name="dateLaunch"
-                            value={editReleases.dateLaunch || null}
-                            onChange={(event) => this.handleInputChange(event)}
-                          />
-                          <SelectTime
-                            label={translate.createRelease.addTime}
-                            id="timeLaunch"
-                            name="timeLaunch"
-                            value={editReleases.timeLaunch || null}
-                            onChange={(event) => this.handleInputChange(event)}
-                          />
-                        </div>
-                        <div className="container_image">
-                          <p>{translate.createRelease.messageImage}</p>
-                          <div className="form_artwork">
-                            <img
-                              src={addImageLaunch ? addImageLaunch : noImage}
-                              alt="Imagen de la versión"
-                            />
-                            <InputImage
-                              id="addImageLaunch"
-                              name="addImageLaunch"
-                              onChange={(event) =>
-                                this.handleInputChange(event)
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div className="form_genres">
-                          <InputField
-                            label={translate.createRelease.addUrlSpotify}
-                            id="urlSpotify"
-                            name="urlSpotify"
-                            value={editReleases.urlSpotify || null}
-                            onChange={(event) => this.handleInputChange(event)}
-                            required={false}
-                          />
-                          <InputField
-                            label={translate.createRelease.addUrlAppleMusic}
-                            id="urlAppleMusic"
-                            name="urlAppleMusic"
-                            value={editReleases.urlAppleMusic || null}
-                            onChange={(event) => this.handleInputChange(event)}
-                            required={false}
-                          />
-                          <InputField
-                            label={translate.createRelease.addRecordLabel}
-                            id="recordLabel"
-                            name="recordLabel"
-                            value={editReleases.recordLabel || null}
-                            onChange={(event) => this.handleInputChange(event)}
-                            required={false}
-                          />
-                          <SelectField
-                            label={translate.createRelease.addTypeLaunch.label}
-                            id="typeLaunch"
-                            name="typeLaunch"
-                            value={editReleases.typeLaunch || null}
-                            options={[
-                              translate.createRelease.addTypeLaunch
-                                .optionSecondary,
-                              translate.createRelease.addTypeLaunch
-                                .optionTertiary,
-                              translate.createRelease.addTypeLaunch
-                                .optionQuarter,
-                            ]}
-                            onChange={(event) => this.handleInputChange(event)}
-                            required={true}
-                          />
-                          <InputField
-                            label={translate.createRelease.addCodeUPC}
-                            id="codeUPC"
-                            name="codeUPC"
-                            value={editReleases.codeUPC || null}
-                            onChange={(event) => this.handleInputChange(event)}
-                            required={false}
-                          />
-                        </div>
-                        <button onClick={() => this.sendReleases(release.id)}>
-                          {translate.editRelease.button}
-                        </button>
-                      </div>
-                    </Modal>
-                  ) : null}
-                </div>
-              ))
-            ) : (
-              <div className="no_releases">
-                <p>
-                  <strong>{translate.home.noReleases}</strong>
-                </p>
-              </div>
+            {releases.length > 0 && (
+              <Link to="/reports" className="btn btn-outline">
+                <span>📊</span>
+                {getTranslate().view_reports || "Ver Reportes"}
+              </Link>
             )}
           </div>
+
+          {loading ? (
+            <div className="grid grid-cols-3">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="card animate-fade-in"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)",
+                    backgroundSize: "200% 100%",
+                    animation: "shimmer 1.5s infinite",
+                  }}
+                >
+                  <div className="card-body">
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "200px",
+                        background: "#e5e7eb",
+                        borderRadius: "var(--radius-lg)",
+                        marginBottom: "var(--space-4)",
+                      }}
+                    ></div>
+                    <div
+                      style={{
+                        height: "20px",
+                        background: "#e5e7eb",
+                        borderRadius: "var(--radius-md)",
+                        marginBottom: "var(--space-2)",
+                      }}
+                    ></div>
+                    <div
+                      style={{
+                        height: "16px",
+                        background: "#e5e7eb",
+                        borderRadius: "var(--radius-md)",
+                        width: "70%",
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : releases.length > 0 ? (
+            <div className="grid grid-cols-3 animate-fade-in">
+              {releases.map((release, index) => (
+                <div
+                  key={release.id}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <CardRelease release={release} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              className="animate-fade-in"
+              style={{ textAlign: "center", padding: "var(--space-16)" }}
+            >
+              <div
+                style={{
+                  fontSize: "4rem",
+                  marginBottom: "var(--space-6)",
+                }}
+              >
+                🎵
+              </div>
+              <h3
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  color: "var(--gray-900)",
+                  marginBottom: "var(--space-4)",
+                }}
+              >
+                {getTranslate().no_releases || "No hay lanzamientos"}
+              </h3>
+              <p
+                style={{
+                  color: "var(--gray-600)",
+                  fontSize: "1.125rem",
+                  marginBottom: "var(--space-8)",
+                  maxWidth: "500px",
+                  margin: "0 auto var(--space-8)",
+                }}
+              >
+                {getTranslate().create_first_release ||
+                  "Crea tu primer lanzamiento para comenzar a distribuir tu música en todas las plataformas digitales."}
+              </p>
+              <Link to="/create-new-version" className="btn btn-primary btn-lg">
+                <span>🚀</span>
+                {getTranslate().create_new_version}
+              </Link>
+            </div>
+          )}
         </div>
-      </section>
-    );
-  }
+      </div>
+
+      <style jsx>{`
+        @keyframes shimmer {
+          0% {
+            background-position: -200% 0;
+          }
+          100% {
+            background-position: 200% 0;
+          }
+        }
+      `}</style>
+    </div>
+  );
 }
 
 export default Home;

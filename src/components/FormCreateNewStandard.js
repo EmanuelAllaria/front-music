@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { PayPalButton } from "react-paypal-button-v2";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import Modal from "react-modal";
 import noImage from "../img/no-image.png";
 import {
@@ -8,8 +8,15 @@ import {
   getMysql,
   checkDuplicateReleaseTitle,
 } from "../db/DatabaseComponent";
-import { resources } from "../i18n";
-import { InputField, InputImage, SelectField, SelectDate, SelectTime } from "./Inputs_Selects_etc";
+import { getTranslate } from "../utils/i18nHelpers";
+import {
+  InputField,
+  InputImage,
+  SelectField,
+  SelectDate,
+  SelectTime,
+} from "./Inputs_Selects_etc";
+import "./css/FormCreateNewStandard.css";
 
 class FormCreateNewStandard extends Component {
   constructor(props) {
@@ -22,7 +29,8 @@ class FormCreateNewStandard extends Component {
       showModal: false,
       addImageLaunch: "",
       errorMessage: "",
-      language: localStorage.getItem("language") || "es",
+      errors: {},
+      isSubmitting: false,
     };
     this.paypalButtonRef = React.createRef();
     // this.fileInputRef = React.createRef();
@@ -34,6 +42,9 @@ class FormCreateNewStandard extends Component {
 
   sendReleases = async (event) => {
     event.preventDefault();
+    const isValid = this.validateForm();
+    if (!isValid) return;
+    this.setState({ isSubmitting: true });
     console.log(this.state);
 
     const { releases } = this.state;
@@ -68,6 +79,10 @@ class FormCreateNewStandard extends Component {
       window.location.href = `/edit-release/${response.data.id}`;
     } catch (error) {
       console.error("Error sending releases:", error);
+      this.setState({
+        errorMessage: "Ocurrió un error al enviar.",
+        isSubmitting: false,
+      });
     }
   };
 
@@ -93,6 +108,10 @@ class FormCreateNewStandard extends Component {
           ...prevState.releases,
           [name]: value,
         },
+        errors: {
+          ...prevState.errors,
+          [name]: "",
+        },
       }));
     } else {
       const file = files[0];
@@ -104,6 +123,10 @@ class FormCreateNewStandard extends Component {
           [name]: file,
         },
         [name]: fileUrl,
+        errors: {
+          ...prevState.errors,
+          [name]: "",
+        },
       }));
     }
   };
@@ -128,6 +151,43 @@ class FormCreateNewStandard extends Component {
       });
   };
 
+  resetForm = () => {
+    this.setState({
+      releases: {},
+      addImageLaunch: "",
+      errors: {},
+      errorMessage: "",
+    });
+  };
+
+  validateForm = () => {
+    const { releases } = this.state;
+    const requiredFields = [
+      "titleRelease",
+      "addArtist",
+      "addGenres",
+      "dateLaunch",
+      "timeLaunch",
+      "typeLaunch",
+    ];
+    const errors = {};
+    requiredFields.forEach((field) => {
+      if (!releases[field]) {
+        errors[field] = "Este campo es obligatorio";
+      }
+    });
+    this.setState({ errors });
+    return Object.keys(errors).length === 0;
+  };
+
+  getPriceByType = () => {
+    const type = this.state.releases.typeLaunch;
+    if (type === "Single") return 10;
+    if (type === "EP") return 25;
+    if (type === "Album") return 40;
+    return 0;
+  };
+
   openModal = () => {
     this.setState({ showModal: true });
     console.log(this.state);
@@ -149,28 +209,49 @@ class FormCreateNewStandard extends Component {
         isOpen={this.state.showModal}
         onRequestClose={this.closeModal}
         contentLabel="PayPal Modal"
+        className="paypal-modal"
+        overlayClassName="paypal-overlay"
       >
         <h2>Pagar con PayPal</h2>
-        <PayPalButton
-          id="paypal"
-          amount="10.00"
-          currency="USD"
-          onSuccess={this.handlePaymentSuccess}
-          onError={(err) => console.log("error" + err)}
+        <span className="paypal-close" onClick={this.closeModal}>
+          ✕
+        </span>
+        <PayPalScriptProvider
           options={{
-            clientId:
+            "client-id":
               "AYSWUWk3WY0kjWfvWAvyxXUwa_25hULgufIV8vMz6_bekBfp-Ew8x-qMgLc2ZHcBTXWFuSUsMf4Azcj-",
+            currency: "USD",
           }}
-          ref={this.paypalButtonRef}
-        />
+        >
+          <PayPalButtons
+            style={{ layout: "vertical" }}
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: String(this.getPriceByType().toFixed(2)),
+                      currency_code: "USD",
+                    },
+                  },
+                ],
+              });
+            }}
+            onApprove={(data, actions) => {
+              return actions.order.capture().then((details) => {
+                this.handlePaymentSuccess(details);
+              });
+            }}
+            onError={(err) => console.log("error" + err)}
+          />
+        </PayPalScriptProvider>
         <button onClick={this.closeModal}>Cerrar</button>
       </Modal>
     );
   }
 
   render() {
-    const { language } = this.state;
-    const translate = resources[language].translation;
+    const translate = getTranslate();
     return (
       <div className="form_create_standard">
         {this.state.paymentComplete ? (
@@ -184,187 +265,235 @@ class FormCreateNewStandard extends Component {
                 <strong>{translate.createRelease.title}</strong>
               </h2>
             </div>
-            <form onSubmit={this.sendReleases}>
-              <div className="title_form_info">
-                <h2>
-                  <span
-                    style={{
-                      padding: "2px 10px",
-                      background: "#12c1ae",
-                      color: "#fff",
-                    }}
-                  >
-                    1
-                  </span>{" "}
-                  <span
-                    style={{
-                      fontWeight: "700",
-                    }}
-                  >
-                    {translate.createRelease.subtitlePrimary}
-                  </span>
-                </h2>
-              </div>
-              <div className="form_information">
-                <InputField
-                  label={translate.createRelease.titleRelease}
-                  id="titleRelease"
-                  name="titleRelease"
-                  value={this.state.releases.titleRelease || null}
-                  onChange={(event) => this.handleInputChange(event)}
-                  required={true}
-                />
-                <div className="copy">
+            <div className="form-card">
+              <form onSubmit={this.sendReleases}>
+                <div className="title_form_info">
+                  <h2>
+                    <span
+                      style={{
+                        padding: "2px 10px",
+                        background: "#12c1ae",
+                        color: "#fff",
+                      }}
+                    >
+                      1
+                    </span>{" "}
+                    <span
+                      style={{
+                        fontWeight: "700",
+                      }}
+                    >
+                      {translate.createRelease.subtitlePrimary}
+                    </span>
+                  </h2>
+                </div>
+                <div className="form_information">
                   <InputField
-                    label={translate.createRelease.addArtist}
-                    id="addArtist"
-                    name="addArtist"
-                    value={this.state.releases.addArtist || null}
+                    label={translate.createRelease.titleRelease}
+                    id="titleRelease"
+                    name="titleRelease"
+                    value={this.state.releases.titleRelease || null}
+                    onChange={(event) => this.handleInputChange(event)}
+                    required={true}
+                  />
+                  <div className="copy">
+                    <InputField
+                      label={translate.createRelease.addArtist}
+                      id="addArtist"
+                      name="addArtist"
+                      value={this.state.releases.addArtist || null}
+                      onChange={(event) => this.handleInputChange(event)}
+                      required={true}
+                    />
+                    <InputField
+                      label={translate.createRelease.addGenres}
+                      id="addGenres"
+                      name="addGenres"
+                      value={this.state.releases.addGenres || ""}
+                      onChange={(event) => this.handleInputChange(event)}
+                      required={true}
+                    />
+                  </div>
+                  <div className="prod">
+                    <SelectDate
+                      label={translate.createRelease.addDate}
+                      id="dateLaunch"
+                      name="dateLaunch"
+                      value={this.state.releases.dateLaunch || null}
+                      onChange={(event) => this.handleInputChange(event)}
+                    />
+                    <SelectTime
+                      label={translate.createRelease.addTime}
+                      id="timeLaunch"
+                      name="timeLaunch"
+                      value={this.state.releases.timeLaunch || null}
+                      onChange={(event) => this.handleInputChange(event)}
+                    />
+                  </div>
+                </div>
+                <div className="title_form_info">
+                  <h2>
+                    <span
+                      style={{
+                        padding: "2px 10px",
+                        background: "#12c1ae",
+                        color: "#fff",
+                      }}
+                    >
+                      2
+                    </span>{" "}
+                    <span
+                      style={{
+                        fontWeight: "700",
+                      }}
+                    >
+                      {translate.createRelease.subtitleSecondary}{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </span>
+                  </h2>
+                </div>
+                <div className="container_image">
+                  <p>{translate.createRelease.messageImage}</p>
+                  <div className="form_artwork">
+                    <img
+                      src={
+                        this.state.addImageLaunch
+                          ? this.state.addImageLaunch
+                          : noImage
+                      }
+                      alt="Imagen de la versión"
+                    />
+                    <InputImage
+                      id="addImageLaunch"
+                      name="addImageLaunch"
+                      onChange={(event) => this.handleInputChange(event)}
+                      // ref={this.fileInputRef}
+                    />
+                  </div>
+                </div>
+                <div className="title_form_info">
+                  <h2>
+                    <span
+                      style={{
+                        padding: "2px 10px",
+                        background: "#12c1ae",
+                        color: "#fff",
+                      }}
+                    >
+                      3
+                    </span>{" "}
+                    <span
+                      style={{
+                        fontWeight: "700",
+                      }}
+                    >
+                      {translate.createRelease.subtitleTertiary}
+                    </span>
+                  </h2>
+                </div>
+                <div className="form_genres">
+                  <InputField
+                    label={translate.createRelease.addUrlSpotify}
+                    id="urlSpotify"
+                    name="urlSpotify"
+                    value={this.state.releases.urlSpotify || null}
+                    onChange={(event) => this.handleInputChange(event)}
+                    required={false}
+                  />
+                  <InputField
+                    label={translate.createRelease.addUrlAppleMusic}
+                    id="urlAppleMusic"
+                    name="urlAppleMusic"
+                    value={this.state.releases.urlAppleMusic || null}
+                    onChange={(event) => this.handleInputChange(event)}
+                    required={false}
+                  />
+                  <InputField
+                    label={translate.createRelease.addRecordLabel}
+                    id="recordLabel"
+                    name="recordLabel"
+                    value={this.state.releases.recordLabel || null}
+                    onChange={(event) => this.handleInputChange(event)}
+                    required={false}
+                  />
+                  <SelectField
+                    label={translate.createRelease.addTypeLaunch.label}
+                    id="typeLaunch"
+                    name="typeLaunch"
+                    value={this.state.releases.typeLaunch || null}
+                    options={["Single", "EP", "Album"]}
                     onChange={(event) => this.handleInputChange(event)}
                     required={true}
                   />
                   <InputField
-                    label={translate.createRelease.addGenres}
-                    id="addGenres"
-                    name="addGenres"
-                    value={this.state.releases.addGenres || ""}
+                    label={translate.createRelease.addCodeUPC}
+                    id="codeUPC"
+                    name="codeUPC"
+                    value={this.state.releases.codeUPC || null}
                     onChange={(event) => this.handleInputChange(event)}
-                    required={true}
+                    required={false}
                   />
                 </div>
-                <div className="prod">
-                  <SelectDate
-                    label={translate.createRelease.addDate}
-                    id="dateLaunch"
-                    name="dateLaunch"
-                    value={this.state.releases.dateLaunch || null}
-                    onChange={(event) => this.handleInputChange(event)}
-                  />
-                  <SelectTime
-                    label={translate.createRelease.addTime}
-                    id="timeLaunch"
-                    name="timeLaunch"
-                    value={this.state.releases.timeLaunch || null}
-                    onChange={(event) => this.handleInputChange(event)}
-                  />
+                <div className="form_input form_submit">
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    onClick={this.resetForm}
+                  >
+                    Limpiar
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    type="submit"
+                    disabled={this.state.isSubmitting}
+                  >
+                    {this.state.isSubmitting ? (
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 8,
+                        }}
+                      >
+                        <span className="loader" /> Enviando...
+                      </span>
+                    ) : (
+                      translate.createRelease.buttonNext
+                    )}
+                  </button>
+                  {this.state.errorMessage && (
+                    <p className="error">{this.state.errorMessage}</p>
+                  )}
+                  <button
+                    className="btn"
+                    type="button"
+                    onClick={this.openModal}
+                  >
+                    Pagar ahora
+                  </button>
                 </div>
+                {/* {this.renderPaypalModal(this.state.releases.addImage)} */}
+              </form>
+            </div>
+            <aside className="summary-panel">
+              <h3>Resumen</h3>
+              <div className="summary-row">
+                <span>Tipo</span>
+                <span>{this.state.releases.typeLaunch || "—"}</span>
               </div>
-              <div className="title_form_info">
-                <h2>
-                  <span
-                    style={{
-                      padding: "2px 10px",
-                      background: "#12c1ae",
-                      color: "#fff",
-                    }}
-                  >
-                    2
-                  </span>{" "}
-                  <span
-                    style={{
-                      fontWeight: "700",
-                    }}
-                  >
-                    {translate.createRelease.subtitleSecondary}{" "}
-                    <span style={{ color: "red" }}>*</span>
-                  </span>
-                </h2>
+              <div className="summary-row">
+                <span>Artista</span>
+                <span>{this.state.releases.addArtist || "—"}</span>
               </div>
-              <div className="container_image">
-                <p>{translate.createRelease.messageImage}</p>
-                <div className="form_artwork">
-                  <img
-                    src={
-                      this.state.addImageLaunch
-                        ? this.state.addImageLaunch
-                        : noImage
-                    }
-                    alt="Imagen de la versión"
-                  />
-                  <InputImage
-                    id="addImageLaunch"
-                    name="addImageLaunch"
-                    onChange={(event) => this.handleInputChange(event)}
-                    // ref={this.fileInputRef}
-                  />
-                </div>
+              <div className="summary-row">
+                <span>Título</span>
+                <span>{this.state.releases.titleRelease || "—"}</span>
               </div>
-              <div className="title_form_info">
-                <h2>
-                  <span
-                    style={{
-                      padding: "2px 10px",
-                      background: "#12c1ae",
-                      color: "#fff",
-                    }}
-                  >
-                    3
-                  </span>{" "}
-                  <span
-                    style={{
-                      fontWeight: "700",
-                    }}
-                  >
-                    {translate.createRelease.subtitleTertiary}
-                  </span>
-                </h2>
+              <div className="summary-total">
+                Total: ${this.getPriceByType().toFixed(2)} USD
               </div>
-              <div className="form_genres">
-                <InputField
-                  label={translate.createRelease.addUrlSpotify}
-                  id="urlSpotify"
-                  name="urlSpotify"
-                  value={this.state.releases.urlSpotify || null}
-                  onChange={(event) => this.handleInputChange(event)}
-                  required={false}
-                />
-                <InputField
-                  label={translate.createRelease.addUrlAppleMusic}
-                  id="urlAppleMusic"
-                  name="urlAppleMusic"
-                  value={this.state.releases.urlAppleMusic || null}
-                  onChange={(event) => this.handleInputChange(event)}
-                  required={false}
-                />
-                <InputField
-                  label={translate.createRelease.addRecordLabel}
-                  id="recordLabel"
-                  name="recordLabel"
-                  value={this.state.releases.recordLabel || null}
-                  onChange={(event) => this.handleInputChange(event)}
-                  required={false}
-                />
-                <SelectField
-                  label={translate.createRelease.addTypeLaunch.label}
-                  id="typeLaunch"
-                  name="typeLaunch"
-                  value={this.state.releases.typeLaunch || null}
-                  options={["Single", "EP", "Album"]}
-                  onChange={(event) => this.handleInputChange(event)}
-                  required={true}
-                />
-                <InputField
-                  label={translate.createRelease.addCodeUPC}
-                  id="codeUPC"
-                  name="codeUPC"
-                  value={this.state.releases.codeUPC || null}
-                  onChange={(event) => this.handleInputChange(event)}
-                  required={false}
-                />
-              </div>
-              <div className="form_input form_submit">
-                <input
-                  required
-                  type="submit"
-                  value={translate.createRelease.buttonNext}
-                  // onClick={this.validateImage}
-                />
-                {this.state.errorMessage && (
-                  <p style={{ color: "red" }}>{this.state.errorMessage}</p>
-                )}
-              </div>
-              {/* {this.renderPaypalModal(this.state.releases.addImage)} */}
-            </form>
+            </aside>
+            {this.renderPaypalModal()}
           </>
         )}
       </div>

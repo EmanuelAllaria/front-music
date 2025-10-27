@@ -1,4 +1,4 @@
-import { resources } from "../i18n";
+import { getTranslate } from "../utils/i18nHelpers";
 
 export function InputField({ label, id, name, value, onChange, required }) {
   return (
@@ -42,7 +42,6 @@ export function SelectField({
   onChange,
   required,
 }) {
-  const language = localStorage.getItem("language") || "es";
   return (
     <div className="form_input">
       <label htmlFor={id}>
@@ -56,10 +55,7 @@ export function SelectField({
         required={required}
       >
         <option disabled selected>
-          {
-            resources[language].translation.createRelease.addTypeLaunch
-              .optionPrimary
-          }
+          {getTranslate().createRelease.addTypeLaunch.optionPrimary}
         </option>
         {options.map((optionValue) => (
           <option key={optionValue} value={optionValue}>
@@ -123,7 +119,9 @@ export function InputMusic({ id, label, name, onChange }) {
 export function TextArea({ label, id, name, value, onChange, required }) {
   return (
     <div className="form_input">
-      <label htmlFor={id}>{label} <span style={{ color: "red" }}>*</span></label>
+      <label htmlFor={id}>
+        {label} <span style={{ color: "red" }}>*</span>
+      </label>
       <textarea
         name={name}
         id={id}
